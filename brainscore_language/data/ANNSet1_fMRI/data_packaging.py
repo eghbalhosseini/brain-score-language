@@ -48,7 +48,7 @@ def load_ANNSet1_fMRI_full(threshold=80):
         atlas_list=np.repeat(atlas_id,data_atlas.shape[1])
         assembly=NeuroidAssembly(data_atlas.values,coords={
             'experiment':('presentation',np.repeat('ANNSet1_fMRI',data_atlas.shape[0])),
-            'stimulus_num':('pre2sentation',data_atlas.stim_name.values),
+            'stimulus_num':('presentation',data_atlas.stim_name.values),
             'stimulus_id': ('presentation', data_atlas.stim_id.values),
             'sentence':('presentation',sentences),
             'stimulus': ('presentation', sentences),
