@@ -1,5 +1,7 @@
 import logging
 import xarray as xr
+import numpy as np
+from scipy.stats import median_abs_deviation
 
 from brainio.assemblies import NeuroidAssembly
 from brainscore_core.benchmarks import BenchmarkBase
@@ -110,6 +112,43 @@ class _Pereira2018ExperimentLinear(BenchmarkBase):
             passage_predictions['stimulus_id'] = 'presentation', passage_stimuli['stimulus_id'].values
             predictions.append(passage_predictions)
         predictions = xr.concat(predictions, dim='presentation')
-        raw_score = self.metric(predictions, self.data)
-        score = ceiling_normalize(raw_score, self.ceiling)
+        # layerwise scores
+        raw_scores = []
+        raw_raw_scores=[]
+        for layer_id, prediction in predictions.groupby('layer'):
+            raw_score = self.metric(prediction, self.data)
+            raw_scores.append(raw_score)
+            raw_raw_scores.append(raw_score.raw.expand_dims(dim={"layer": [layer_id]}, axis=0))
+            #raw_scores.append(raw_score.raw.expand_dims(dim={"layer": [layer_id]}, axis=0))
+        raw_scores = xr.concat(raw_scores, dim='layer')
+        raw_raw_scores=xr.concat(raw_raw_scores, dim='layer')
+        scores=[]
+        for l,sc in raw_scores.groupby('layer'):
+            sc = ceiling_normalize(sc, self.ceiling)
+            scores.append(sc)
+        scores=xr.concat(scores,dim='layer')
+        score = Score([scores.values], coords={'aggregation': ['center'],
+                                               'layer':raw_scores.layer.values},
+                      dims=['aggregation','layer'])
+        score.attrs['raw'] = raw_scores
+        score.attrs['raw_raw']=raw_raw_scores
+        #score = raw_scores.mean('split')
+        #score = score.groupby('subject').median()
+        #center = score.median('subject')
+        #subject_values = np.nan_to_num(score.values, nan=0)  # mad cannot deal with all-nan in one axis, treat as 0
+        #subject_axis = score.dims.index(score['subject'].dims[0])
+        #error = median_abs_deviation(subject_values, axis=subject_axis)
+        # ceiling normalize
+        #scores=[]
+        #for l,sc in center.groupby('layer'):
+        #    sc = ceiling_normalize(sc, self.ceiling)
+        #    scores.append(sc)
+        #scores=xr.concat(scores,dim='layer')
+
+        #score = Score([scores.values, error], coords={'aggregation': ['center', 'error'],
+        #                                       'layer':scores.layer.values},
+        #              dims=['aggregation','layer'])
+        #score.attrs['raw'] = raw_scores
+        #score.attrs['description'] = "score aggregated by taking median of neuroids per subject, " \
+        #                             "then median of subject scores"
         return score

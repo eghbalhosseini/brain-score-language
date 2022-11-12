@@ -14,3 +14,18 @@ def ceiling_normalize(raw_score: Score, ceiling: Score) -> Score:
         score.attrs = attrs
         score.attrs['overshoot'] = overshoot_value
     return score
+
+
+def ceiling_normalize_layerwise(raw_scores: Score, ceiling: Score) -> Score:
+    # normalize by ceiling, but not above 1
+    score = raw_scores / ceiling
+    score.attrs['raw'] = raw_scores
+    score.attrs['ceiling'] = ceiling
+    if score > 1:
+        overshoot_value = score.item()
+        # ideally we would just update the value, but I could not figure out how to update a scalar DataArray
+        attrs = score.attrs
+        score = type(score)(1, coords=score.coords, dims=score.dims)
+        score.attrs = attrs
+        score.attrs['overshoot'] = overshoot_value
+    return score
