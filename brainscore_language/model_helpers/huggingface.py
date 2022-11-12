@@ -261,8 +261,9 @@ class HuggingfaceSubject(ArtificialSubject):
 
 class HuggingfaceGroup(HuggingfaceSubject):
     def __init__(self,model_id: str,
-            region_layer_mapping: dict):
-        super(HuggingfaceGroup, self).__init__(model_id,region_layer_mapping)
+            region_layer_mapping: dict,model=None,
+            tokenizer=None):
+        super(HuggingfaceGroup, self).__init__(model_id,region_layer_mapping,model,tokenizer)
 
     def _setup_hooks(self):
         """ set up a group of hooks for recording internal neural activity from the model (aka layer activations) """
