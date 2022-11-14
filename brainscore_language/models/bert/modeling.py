@@ -1,11 +1,9 @@
-
-from typing import  Tuple
+from typing import Tuple
 import torch
 from collections import OrderedDict
 from torch.utils.hooks import RemovableHandle
-from transformers import AutoModelForMaskedLM, AutoTokenizer
-
-from brainscore_language.model_helpers.huggingface import HuggingfaceSubject, HuggingfaceGroup
+from transformers import AutoModelForMaskedLM
+from brainscore_language.model_helpers.huggingface import HuggingfaceSubject
 
 class BERTSubject(HuggingfaceSubject):
     def __init__(self, model_id: str,
