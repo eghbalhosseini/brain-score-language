@@ -9,13 +9,14 @@ from numpy.random import RandomState
 from result_caching import store
 from scipy.optimize import curve_fit
 from tqdm import tqdm, trange
-
+import xarray as xr
 from brainio.assemblies import DataAssembly, array_is_element, walk_coords, merge_data_arrays
 from brainscore_core.metrics import Score
 from brainscore_language import load_benchmark
 from brainscore_language.utils import fullname
 from brainscore_language.utils.s3 import upload_data_assembly
 from brainscore_language.utils.transformations import apply_aggregate
+import matplotlib.pyplot as plt
 
 _logger = logging.getLogger(__name__)
 
@@ -54,9 +55,16 @@ class HoldoutSubjectCeiling:
     def __call__(self, assembly, metric):
         subjects = set(assembly[self.subject_column].values)
         scores = []
+        '''give a set of subjects create a random selection, say we have {906,916} the selection would be ['916', '916', '916', '916', '906'] '''
         iterate_subjects = self._rng.choice(list(subjects), size=self._num_bootstraps)  # use only a subset of subjects
         for subject in tqdm(iterate_subjects, desc='heldout subject'):
             try:
+                '''procedure here is as follow: 
+                1. create a subject_assembly which is the subject to be predicted, 906
+                2. create a pool assembly which is the pool of subjects to use to predict subject_assembly its subjects - subject
+                3. compute a metric between subject_assembly and pool assembly
+                4. setting the subject coordinate
+                '''
                 subject_assembly = assembly[{'neuroid': [subject_value == subject
                                                          for subject_value in assembly[self.subject_column].values]}]
                 # run subject pool as neural candidate
@@ -79,7 +87,7 @@ class HoldoutSubjectCeiling:
                     continue
                 else:
                     raise e
-
+        '''combine voxel scores hold out subjects : ['916', '916', '916', '916', '906'] , given the reptitition it would be sum of 906 and 916'''
         scores = Score.merge(*scores)
         scores = apply_aggregate(lambda scores: scores.mean(self.subject_column), scores)
         return scores
@@ -106,10 +114,15 @@ class ExtrapolationCeiling:
         subjects = set(assembly[self.subject_column].values)
         subject_subsamples = tuple(range(2, len(subjects) + 1))
         scores = []
+        scores_aggregate=[]
+        '''iterate over the subject sets, say we have 8 subjects then we can create pools with (2, 3, 4, 5, 6, 7, 8) subjects in them'''
         for num_subjects in tqdm(subject_subsamples, desc='num subjects'):
-            for sub_subjects in self._random_combinations(
-                    subjects=set(assembly[self.subject_column].values),
-                    num_subjects=num_subjects, choice=self.num_subsamples, rng=self._rng):
+            ''' create a pool of subjects based on the number of subjects given, example (2 subjects : {('837', '865'),
+            ('837', '906'),('837', '913'),('848', '865'),('906', '682'),('906', '848'),('913', '865'),('916', '848'),
+            ('916', '880'),('916', '906')}
+            '''
+            subject_sets =  self._random_combinations(subjects=set(assembly[self.subject_column].values),num_subjects=num_subjects, choice=self.num_subsamples, rng=self._rng)
+            for sub_subjects in subject_sets:
                 sub_assembly = assembly[{'neuroid': [subject in sub_subjects
                                                      for subject in assembly[self.subject_column].values]}]
                 selections = {self.subject_column: sub_subjects}
@@ -122,14 +135,38 @@ class ExtrapolationCeiling:
                         score = score.expand_dims(expand_dim)
                         score[expand_dim] = [str(selection)]
                     scores.append(score.raw)
+                    scores_aggregate.append(score)
                 except KeyError as e:  # nothing to merge
                     if str(e) == "'z'":
                         self._logger.debug(f"Ignoring merge error {e}")
                         continue
                     else:
                         raise e
-        scores = Score.merge(*scores)
-        return scores
+
+        scores_xr = Score.merge(*scores)
+        scores_xr.attrs['raw_score'] = scores
+        scores_xr.attrs['raw_aggregate_score'] = scores_aggregate
+        '''this section was used to print the results of estimates
+        BEGIN CODE 
+        x_val=np.stack([x.num_subjects.values for x in scores_aggregate]).squeeze()
+        y_val=np.stack([x.values for x in scores_aggregate]).squeeze()
+        fig = plt.figure(figsize=[11, 8])
+        ax0 = fig.add_axes((.2, .1, .6, .7))
+        ax0.scatter(x_val+np.random.normal(0,.02,x_val.shape),y_val,s=50,c='r',edgecolor='k')
+
+        ax0.set_xlabel("number of subject")
+        ax0.set_ylabel("var explained, left out subject")
+        ax0.axhline(y=0, color='k', linewidth=2)
+        ax0.set_ylim([-.1,.6])
+
+        fig.savefig(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/{assembly.identifier}_regression_ceilings.png',
+                    facecolor=(1, 1, 1), edgecolor='none')
+        fig.savefig(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/{assembly.identifier}_regression_ceilings.pdf',
+                   facecolor=(1, 1, 1), edgecolor='none')
+                   
+        END CODE 
+        '''
+        return scores_xr
 
     def _random_combinations(self, subjects, num_subjects, choice, rng):
         # following https://stackoverflow.com/a/55929159/2225200. Also see similar method in `behavioral.py`.
