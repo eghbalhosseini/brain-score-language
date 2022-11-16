@@ -23,8 +23,8 @@ def ANNSet1_fMRI_lang_top_90():
         raw_kwargs=dict(version_id='eErH0hqDvGrUo5o79L1b4eqECXDzSlub',
             sha1='31f6035ae2d7f3734292ff4d35fccf7e92bd19ce')))
 
-def ANNSet1_fMRI_benchmarkLinear(atlas=None,ceiling_s3_kwargs=None):
-    return _ANNSet1_fMRI_ExperimentLinear(atlas,ceiling_s3_kwargs)
+#def ANNSet1_fMRI_benchmarkLinear(atlas=None,ceiling_s3_kwargs=None):
+#    return _ANNSet1_fMRI_ExperimentLinear(atlas,ceiling_s3_kwargs)
 
 
 class _ANNSet1_fMRI_ExperimentLinear(BenchmarkBase):
