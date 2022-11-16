@@ -72,12 +72,12 @@ class _ANNSet1_fMRI_ExperimentLinear(BenchmarkBase):
             raw_score = self.metric(prediction, self.data)
             raw_scores.append(raw_score.raw.expand_dims(dim={"layer":[layer_id]},axis=0))
         raw_scores = xr.concat(raw_scores, dim='layer')
-        score_by_voxels = raw_scores.mean('split')
-        score_by_subject = score_by_voxels.groupby('subject').median()
-        center = score_by_subject.median('subject')
-        subject_values = np.nan_to_num(score_by_subject.values,
+        score = raw_scores.mean('split')
+        score = score.groupby('subject').median()
+        center = score.median('subject')
+        subject_values = np.nan_to_num(score.values,
                                        nan=0)  # mad cannot deal with all-nan in one axis, treat as 0
-        subject_axis = score_by_subject.dims.index(score_by_subject['subject'].dims[0])
+        subject_axis = score.dims.index(score['subject'].dims[0])
         error = median_abs_deviation(subject_values, axis=subject_axis)
         score = Score([center, error], coords={'aggregation': ['center', 'error'],
                                                'layer': raw_scores.layer.values},

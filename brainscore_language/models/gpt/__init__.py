@@ -22,9 +22,9 @@ model_registry['distilgpt2'] = lambda: HuggingfaceSubject(model_id='distilgpt2',
 model_registry['distilgpt2-Pereira2018'] = lambda: HuggingfaceSubject(model_id='distilgpt2', region_layer_mapping={
     ArtificialSubject.RecordingTarget.language_system: 'transformer.h.5'})
 
-model_id='distilgpt2'
-model_registry[f'{model_id}-layerwise'] = lambda: HuggingfaceGroup(model_id=model_id, region_layer_mapping={
-    ArtificialSubject.RecordingTarget.language_system: get_layer_names(model_id)})
+
+model_registry[f'distilgpt2-layerwise'] = lambda: HuggingfaceGroup(model_id='distilgpt2', region_layer_mapping={
+    ArtificialSubject.RecordingTarget.language_system: get_layer_names('distilgpt2')})
 
 
 model_registry['gpt2-xl'] = lambda: HuggingfaceSubject(model_id='gpt2-xl', region_layer_mapping={
