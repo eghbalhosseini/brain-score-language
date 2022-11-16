@@ -34,7 +34,6 @@ class ImportPlugin:
             with open(init_file) as f:
                 registry_name = self.plugin_type.strip(
                     's') + '_registry'  # remove plural and determine variable name, e.g. "models" -> "model_registry"
-                lines=[line for line in f]
                 plugin_registrations = [line for line in f if f"{registry_name}['{self.identifier}']"
                                         in line.replace('\"', '\'')]
                 if len(plugin_registrations) > 0:
