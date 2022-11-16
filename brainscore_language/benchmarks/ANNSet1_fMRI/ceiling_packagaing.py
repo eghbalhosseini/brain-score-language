@@ -17,6 +17,9 @@ from brainscore_language.utils import fullname
 from brainscore_language.utils.s3 import upload_data_assembly
 from brainscore_language.utils.transformations import apply_aggregate
 import matplotlib.pyplot as plt
+from pathlib import Path
+import pickle
+import pandas as pd
 
 _logger = logging.getLogger(__name__)
 
@@ -177,13 +180,13 @@ class ExtrapolationCeiling:
             combinations.add(tuple(elements))
         return combinations
 
+    #@store(identifier_ignore=['assembly', 'metric'])
     def extrapolate(self, identifier, ceilings):
         neuroid_ceilings = []
         raw_keys = ['bootstrapped_params', 'error_low', 'error_high', 'endpoint_x']
         raw_attrs = defaultdict(list)
         for i in trange(len(ceilings[self.extrapolation_dimension]),
                         desc=f'{self.extrapolation_dimension} extrapolations'):
-        #for i in range(1016,len(ceilings[self.extrapolation_dimension]),1):
             try:
                 # extrapolate per-neuroid ceiling
                 neuroid_ceiling = ceilings.isel(**{self.extrapolation_dimension: [i]})
@@ -336,23 +339,27 @@ class NoOverlapException(Exception):
     pass
 
 
-# if __name__ == '__main__':
-#     benchmark = load_benchmark(f'ANNSet1_fMRI.train.language_top_90-linear')
-#     ceiler = ExtrapolationCeiling()
-#
-#     ceiling = ceiler(benchmark.data, metric=benchmark.metric)
-#     scores=ceiler.collect(identifier=benchmark.data.identifier,assembly=benchmark.data,metric=benchmark.metric)
-#     ceiler.extrapolate(identifier=benchmark.data.identifier, ceilings=scores)
+if __name__ == '__main__':
+    benchmark = load_benchmark(f'ANNSet1_fMRI.train.language_top_90-linear')
+    ceiler = ExtrapolationCeiling()
+    #ceiling = ceiler(benchmark.data, metric=benchmark.metric)
+    scores=ceiler.collect(identifier=benchmark.data.identifier,assembly=benchmark.data,metric=benchmark.metric)
+    ceilings=ceiler.extrapolate(identifier=benchmark.data.identifier, ceilings=scores)
+
+    ceiling_dir=Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/ceiling_{benchmark.identifier}.pkl')
+    ceilings=pd.read_pickle(ceiling_dir.__str__())
+    with open(ceiling_dir.__str__(),'wb') as f:
+        pickle.dump(ceilings,f)
 #     _logger.info(f"Uploading ceiling {ceiling}")
 #     # Note that because we cannot serialize complex objects to netCDF, attributes like 'raw' and 'bootstrapped_params'
 #     # will get lost during upload
-#     upload_data_assembly(ceiling,
-#                          assembly_identifier=benchmark.identifier,
-#                          assembly_prefix='ceiling_')
+    upload_data_assembly(ceilings,
+                         assembly_identifier=benchmark.identifier,
+                          assembly_prefix='ceiling_')
 #     # also upload raw (and raw.raw) attributes
-#     upload_data_assembly(ceiling.raw,
-#                          assembly_identifier=benchmark.identifier,
-#                          assembly_prefix='ceiling_raw_')
-#     upload_data_assembly(ceiling.raw.raw,
-#                          assembly_identifier=benchmark.identifier,
-#                          assembly_prefix='ceiling_raw_raw_')
+    upload_data_assembly(ceilings.raw,
+                          assembly_identifier=benchmark.identifier,
+                          assembly_prefix='ceiling_raw_')
+    #upload_data_assembly(ceilings.raw.raw,
+    #                      assembly_identifier=benchmark.identifier,
+    #                      assembly_prefix='ceiling_raw_raw_')

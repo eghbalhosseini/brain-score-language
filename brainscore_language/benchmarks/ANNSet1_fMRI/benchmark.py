@@ -16,17 +16,23 @@ logger = logging.getLogger(__name__)
 
 BIBTEX = """
 }"""
+def ANNSet1_fMRI_lang_top_90():
+    return ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_90',ceiling_s3_kwargs=dict(
+        version_id='L49MDfmlJCF7q5TvWI1S0n_NAvfFo5Zg',
+        sha1='4c499cfa5491d75d93fc29d1e18ff12771b2bdbf',
+        raw_kwargs=dict(version_id='eErH0hqDvGrUo5o79L1b4eqECXDzSlub',
+            sha1='31f6035ae2d7f3734292ff4d35fccf7e92bd19ce')))
 
-def ANNSet1_fMRI_benchmarkLinear(atlas=None):
-    return ANNSet1_fMRI_ExperimentLinear(atlas)
+def ANNSet1_fMRI_benchmarkLinear(atlas=None,ceiling_s3_kwargs=None):
+    return ANNSet1_fMRI_ExperimentLinear(atlas,ceiling_s3_kwargs)
 
 
 class ANNSet1_fMRI_ExperimentLinear(BenchmarkBase):
-    def __init__(self, atlas:str ):
+    def __init__(self, atlas:str,ceiling_s3_kwargs: dict ):
         self.data = self._load_data(atlas)
         self.metric = load_metric('linear_pearsonr')
         identifier = f'ANNSet1_fMRI.{atlas}-linear'
-        ceiling = None#self._load_ceiling(identifier=identifier, **ceiling_s3_kwargs)
+        ceiling = self._load_ceiling(identifier=identifier, **ceiling_s3_kwargs)
         super(ANNSet1_fMRI_ExperimentLinear, self).__init__(
             identifier=identifier,
             version=1,
@@ -40,6 +46,13 @@ class ANNSet1_fMRI_ExperimentLinear(BenchmarkBase):
         data = data.sortby('stimulus_id')
         data.attrs['identifier'] = f'ANNSet1_fMRI.{atlas}'
         return data
+
+    def _load_ceiling(self, identifier: str, version_id: str, sha1: str, assembly_prefix="ceiling_", raw_kwargs=None):
+        ceiling = load_from_s3(identifier, cls=Score, assembly_prefix=assembly_prefix, version_id=version_id, sha1=sha1)
+        if raw_kwargs:  # recursively load raw attributes
+            raw = self._load_ceiling(identifier=identifier, assembly_prefix=assembly_prefix + "raw_", **raw_kwargs)
+            ceiling.attrs['raw'] = raw
+        return ceiling
 
     def __call__(self, candidate: ArtificialSubject) -> Score:
         candidate.start_neural_recording(recording_target=ArtificialSubject.RecordingTarget.language_system,
