@@ -79,11 +79,16 @@ class _ANNSet1_fMRI_ExperimentLinear(BenchmarkBase):
                                        nan=0)  # mad cannot deal with all-nan in one axis, treat as 0
         subject_axis = score.dims.index(score['subject'].dims[0])
         error = median_abs_deviation(subject_values, axis=subject_axis)
-        score = Score([center, error], coords={'aggregation': ['center', 'error'],
-                                               'layer': raw_scores.layer.values},
-                      dims=['aggregation', 'layer'])
+        # ceiling normalize
+        scores=[]
+        for l,sc in center.groupby('layer'):
+            sc = ceiling_normalize(sc, self.ceiling)
+            scores.append(sc)
+        scores=xr.concat(scores,dim='layer')
+        score = Score([scores.values, error], coords={'aggregation': ['center', 'error'],
+                                               'layer':scores.layer.values},
+                      dims=['aggregation','layer'])
         score.attrs['raw'] = raw_scores
-        score.attrs['ceiling'] = self.ceiling
         score.attrs['description'] = "score aggregated by taking median of neuroids per subject, " \
                                      "then median of subject scores"
 
