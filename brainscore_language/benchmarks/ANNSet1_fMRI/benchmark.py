@@ -17,23 +17,23 @@ logger = logging.getLogger(__name__)
 BIBTEX = """
 }"""
 def ANNSet1_fMRI_lang_top_90():
-    return ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_90',ceiling_s3_kwargs=dict(
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_90',ceiling_s3_kwargs=dict(
         version_id='L49MDfmlJCF7q5TvWI1S0n_NAvfFo5Zg',
         sha1='4c499cfa5491d75d93fc29d1e18ff12771b2bdbf',
         raw_kwargs=dict(version_id='eErH0hqDvGrUo5o79L1b4eqECXDzSlub',
             sha1='31f6035ae2d7f3734292ff4d35fccf7e92bd19ce')))
 
 def ANNSet1_fMRI_benchmarkLinear(atlas=None,ceiling_s3_kwargs=None):
-    return ANNSet1_fMRI_ExperimentLinear(atlas,ceiling_s3_kwargs)
+    return _ANNSet1_fMRI_ExperimentLinear(atlas,ceiling_s3_kwargs)
 
 
-class ANNSet1_fMRI_ExperimentLinear(BenchmarkBase):
+class _ANNSet1_fMRI_ExperimentLinear(BenchmarkBase):
     def __init__(self, atlas:str,ceiling_s3_kwargs: dict ):
         self.data = self._load_data(atlas)
         self.metric = load_metric('linear_pearsonr')
         identifier = f'ANNSet1_fMRI.{atlas}-linear'
         ceiling = self._load_ceiling(identifier=identifier, **ceiling_s3_kwargs)
-        super(ANNSet1_fMRI_ExperimentLinear, self).__init__(
+        super(_ANNSet1_fMRI_ExperimentLinear, self).__init__(
             identifier=identifier,
             version=1,
             parent='ANNSet1_fMRI-linear',
