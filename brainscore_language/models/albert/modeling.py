@@ -9,6 +9,12 @@ from transformers import AutoModelForMaskedLM, AutoTokenizer
 from brainio.assemblies import DataAssembly, NeuroidAssembly, BehavioralAssembly
 from brainscore_language.model_helpers.huggingface import HuggingfaceSubject, HuggingfaceGroup
 
+def get_layer_names(model_id):
+    model_ = AutoModelForMaskedLM.from_pretrained(model_id)
+    flat_list = ('embeddings',) + tuple(
+        f'encoder.albert_layer_groups.{i}' for i in range(model_.config.num_hidden_layers))
+    return flat_list
+
 activation = {}
 def getActivation(name):
     # the hook signature
