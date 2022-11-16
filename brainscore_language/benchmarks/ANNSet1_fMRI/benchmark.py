@@ -23,6 +23,19 @@ def ANNSet1_fMRI_lang_top_90():
         raw_kwargs=dict(version_id='eErH0hqDvGrUo5o79L1b4eqECXDzSlub',
             sha1='31f6035ae2d7f3734292ff4d35fccf7e92bd19ce')))
 
+def ANNSet1_fMRI_lang_top_80():
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_80',ceiling_s3_kwargs=None)
+
+def ANNSet1_fMRI_lang_top_70():
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_70',ceiling_s3_kwargs=None)
+
+def ANNSet1_fMRI_auditory():
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.auditory',ceiling_s3_kwargs=None)
+
+def ANNSet1_fMRI_visual():
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.visual',ceiling_s3_kwargs=None)
+
+
 #def ANNSet1_fMRI_benchmarkLinear(atlas=None,ceiling_s3_kwargs=None):
 #    return _ANNSet1_fMRI_ExperimentLinear(atlas,ceiling_s3_kwargs)
 
@@ -32,7 +45,7 @@ class _ANNSet1_fMRI_ExperimentLinear(BenchmarkBase):
         self.data = self._load_data(atlas)
         self.metric = load_metric('linear_pearsonr')
         identifier = f'ANNSet1_fMRI.{atlas}-linear'
-        ceiling = self._load_ceiling(identifier=identifier, **ceiling_s3_kwargs)
+        ceiling = None if not ceiling_s3_kwargs else self._load_ceiling(identifier=identifier, **ceiling_s3_kwargs)
         super(_ANNSet1_fMRI_ExperimentLinear, self).__init__(
             identifier=identifier,
             version=1,
