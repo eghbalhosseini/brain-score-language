@@ -24,49 +24,36 @@ def ANNSet1_fMRI_lang_top_90():
             sha1='31f6035ae2d7f3734292ff4d35fccf7e92bd19ce')))
 
 def ANNSet1_fMRI_lang_top_80():
-    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_80',ceiling_s3_kwargs=None)
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_80',ceiling_s3_kwargs=dict(
+        version_id='jY_VtNFAUAp5tkUgb250FVJJsO5b1Ppk',
+        sha1='04a049aa9ab2c79c9354ea7d2176661b9b7af6d2',
+        raw_kwargs=dict(version_id='59CR3B6xplPqoiR.mG2arR9hLOXsjnhb',
+            sha1='ad897894978dbaaa177d2a8c696db2395f56aa02')))
 
-# def ANNSet1_fMRI_lang_top_80():
-#     return _ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_80',ceiling_s3_kwargs=dict(
-#         version_id='8JK1PqOF8ogtA5uUorZtGLE7uQm1eqXQ',
-#         sha1='04a049aa9ab2c79c9354ea7d2176661b9b7af6d2',
-#         raw_kwargs=dict(version_id='VgMygiNPlLN17PMh_5I5AJVcrqHJxnzv',
-#             sha1='e5949a4857d6e9bb5381472f32e99042898a67b4')))
 
 def ANNSet1_fMRI_lang_top_70():
-    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_70',ceiling_s3_kwargs=None)
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_70',ceiling_s3_kwargs=dict(
+        version_id='O4XoVlc7bQDZle2gclmYQegkKLB6xCfI',
+        sha1='84dac3d377c8a92050b04d8bb4746768f9e6f10d',
+        raw_kwargs=dict(version_id='oIjZn35kUmuO0_AbmY1vLMS9pvl3uu_F',
+            sha1='4762e990fa66a9b93c9e5e6c5dfdf94602021d0c')))
 
-
-# def ANNSet1_fMRI_lang_top_70():
-#     return _ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_70',ceiling_s3_kwargs=dict(
-#         version_id='Gfq0ISZ.sH4oK15KB4KfXdLvVQEWPFQQ',
-#         sha1='84dac3d377c8a92050b04d8bb4746768f9e6f10d',
-#         raw_kwargs=dict(version_id='lOnQ0T4WvzTyXeuxpMw021X_poImYJVZ',
-#             sha1='102700789eef7dee639f169a240df4e10c54e8e0')))
 
 def ANNSet1_fMRI_auditory():
-    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.auditory',ceiling_s3_kwargs=None)
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.auditory',ceiling_s3_kwargs=dict(
+        version_id='eYlO9XGEQne1LRcVSAh.ZPtvn.m2YH5F',
+        sha1='8335c851452fbeea6a13949da16435e35ef920e8',
+        raw_kwargs=dict(version_id='f1TEyMW.0TdS0hJYcr3j8fm_mQY5rnO0',
+            sha1='bf07ec63ca61e7ea1670474dcc52d7ca68b71bdf')))
 
-# def ANNSet1_fMRI_auditory():
-#     return _ANNSet1_fMRI_ExperimentLinear(atlas='train.auditory',ceiling_s3_kwargs=dict(
-#         version_id='vbp8DSsRhNfIuxrekGWGZwoqWt7cDLD6',
-#         sha1='8335c851452fbeea6a13949da16435e35ef920e8',
-#         raw_kwargs=dict(version_id='GsxZzkJyUyHn67K12gL7xhCssjF77HoD',
-#             sha1='3abb4e4b42f6c4251299beadc193e3e5a8ad4639')))
 
 def ANNSet1_fMRI_visual():
-    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.visual',ceiling_s3_kwargs=None)
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='train.visual',ceiling_s3_kwargs=dict(
+        version_id='Iye6YTutcuvF_MQIpDbP_keC2ALHcIQE',
+        sha1='8ac663d6fd6feea5998189183ef48f9ea4cac0ba',
+        raw_kwargs=dict(version_id='2xVUF8d_8thWGrYM_4iNbVTKJHUDjuX6',
+            sha1='9a02a96e242e1202b091958a7563352111dfa46b')))
 
-# def ANNSet1_fMRI_visual():
-#     return _ANNSet1_fMRI_ExperimentLinear(atlas='train.visual',ceiling_s3_kwargs=dict(
-#         version_id='8Ay4p7E5iIg3M1w9WNSoYvEEHlPzhSxs',
-#         sha1='8ac663d6fd6feea5998189183ef48f9ea4cac0ba',
-#         raw_kwargs=dict(version_id='gigdM4Wdk9k9UOMlJCKsvMz7pQjGcd72',
-#             sha1='7a01d337587049878f86ccaeb06aad868060a69b')))
-
-
-#def ANNSet1_fMRI_benchmarkLinear(atlas=None,ceiling_s3_kwargs=None):
-#    return _ANNSet1_fMRI_ExperimentLinear(atlas,ceiling_s3_kwargs)
 
 
 class _ANNSet1_fMRI_ExperimentLinear(BenchmarkBase):

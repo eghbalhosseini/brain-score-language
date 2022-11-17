@@ -25,7 +25,7 @@ import pandas as pd
 _logger = logging.getLogger(__name__)
 
 def upload_ceiling(atlas):
-    atlas='train.language_top_80'
+    #atlas='train.auditory'
     benchmark = load_benchmark(f'ANNSet1_fMRI.{atlas}-linear')
 
     ceiler = ExtrapolationCeiling()
@@ -36,6 +36,7 @@ def upload_ceiling(atlas):
         pickle.dump(ceiling,f)
     # Note that because we cannot serialize complex objects to netCDF, attributes like 'raw' and 'bootstrapped_params'
     # will get lost during upload
+    #ceiling=pd.read_pickle(ceiling_dir)
     upload_data_assembly(ceiling,
                          assembly_identifier=benchmark.identifier,
                          assembly_prefix='ceiling_')
