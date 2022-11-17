@@ -21,4 +21,4 @@ model_registry['distilgpt2-layerwise'] = lambda: HuggingfaceGroup(model_id='dist
 
 
 model_registry['gpt2-xl'] = lambda: HuggingfaceSubject(model_id='gpt2-xl', region_layer_mapping={
-    ArtificialSubject.RecordingTarget.language_system: 'transformer.h.43.mlp.dropout'})
+    ArtificialSubject.RecordingTarget.language_system: 'transformer.h.43'})

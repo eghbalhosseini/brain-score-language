@@ -4,7 +4,7 @@ from brainscore_language.models.roberta.modeling import RoBERTaSubject,RoBERTaGr
 
 
 model_registry['roberta-base'] = lambda: RoBERTaSubject(model_id="roberta-base", region_layer_mapping={
-    ArtificialSubject.RecordingTarget.language_system: 'roberta.encoder.layer.4'})
+    ArtificialSubject.RecordingTarget.language_system: 'roberta.encoder.layer.1'})
 
 
 model_registry['roberta-base-layerwise'] = lambda: RoBERTaGroup(model_id="roberta-base", region_layer_mapping={
