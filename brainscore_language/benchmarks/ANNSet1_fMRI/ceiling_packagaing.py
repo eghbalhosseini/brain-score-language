@@ -25,7 +25,9 @@ import pandas as pd
 _logger = logging.getLogger(__name__)
 
 def upload_ceiling(atlas):
+    atlas='train.language_top_80'
     benchmark = load_benchmark(f'ANNSet1_fMRI.{atlas}-linear')
+
     ceiler = ExtrapolationCeiling()
     ceiling = ceiler(benchmark.data, metric=benchmark.metric)
     _logger.info(f"Uploading ceiling {ceiling} and saving them locally")
