@@ -98,12 +98,8 @@ class _Fedorenko2016ExperimentLinear(BenchmarkBase):
             sentence_prediction['stimulus_id'] = 'presentation', sentence_stimuli['stimulus_id'].values
             predictions.append(sentence_prediction)
         predictions = xr.concat(predictions, dim='presentation')
-        raw_scores=[]
-        for layer_id, prediction in predictions.groupby('layer'):
-            raw_score = self.metric(prediction, self.data)
-            raw_scores.append(raw_score.raw.expand_dims(dim={"layer":[layer_id]},axis=0))
-        raw_scores=xr.concat(raw_scores,dim='layer')
-        score_by_electrode=raw_scores.mean('split')
+        raw_score=self.metric(predictions,self.data)
+        score_by_electrode=raw_score.raw.mean('split')
         ceiling_by_electrode=self.ceiling.raw.sel(aggregation='center')
         score = score_by_electrode / ceiling_by_electrode
         score_by_subject=score.groupby('subject_UID').median()
@@ -112,10 +108,9 @@ class _Fedorenko2016ExperimentLinear(BenchmarkBase):
                                        nan=0)  # mad cannot deal with all-nan in one axis, treat as 0
         subject_axis = score_by_subject.dims.index(score_by_subject['subject_UID'].dims[0])
         error = median_abs_deviation(subject_values, axis=subject_axis)
-        score = Score([center, error], coords={'aggregation': ['center', 'error'],
-                                               'layer':raw_scores.layer.values},
-                      dims=['aggregation','layer'])
-        score.attrs['raw']=raw_scores
+        score = Score([center, error], coords={'aggregation': ['center', 'error']},
+                      dims=['aggregation'])
+        score.attrs['raw']=raw_score
         score.attrs['ceiling']=self.ceiling.raw
         score.attrs['description'] = "score aggregated by taking median of neuroids per subject, " \
                                      "then median of subject scores"

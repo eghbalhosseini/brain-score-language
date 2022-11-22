@@ -10,3 +10,6 @@ model_registry['distilgpt2'] = lambda: HuggingfaceSubject(model_id='distilgpt2',
 
 model_registry['gpt2-xl'] = lambda: HuggingfaceSubject(model_id='gpt2-xl', region_layer_mapping={
     ArtificialSubject.RecordingTarget.language_system: 'transformer.h.43.mlp.dropout'})
+
+model_registry['distilgpt2-ECoG'] = lambda: HuggingfaceSubject(model_id='distilgpt2', region_layer_mapping={
+    ArtificialSubject.RecordingTarget.language_system: 'transformer.h.2'})
