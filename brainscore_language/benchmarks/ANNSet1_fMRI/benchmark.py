@@ -20,6 +20,19 @@ BIBTEX = """
 def ANNSet1_fMRI_lang_top_90_V2():
     return _ANNSet1_fMRI_ExperimentLinear(atlas='best.language_top_90_V2',ceiling_s3_kwargs=None)
 
+def ANNSet1_fMRI_lang_top_80_V2():
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='best.language_top_80_V2',ceiling_s3_kwargs=None)
+
+def ANNSet1_fMRI_lang_top_70_V2():
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='best.language_top_70_V2',ceiling_s3_kwargs=None)
+
+def ANNSet1_fMRI_auditory_V2():
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='best.auditory_V2',ceiling_s3_kwargs=None)
+
+def ANNSet1_fMRI_visual_V2():
+    return _ANNSet1_fMRI_ExperimentLinear(atlas='best.visual_V2',ceiling_s3_kwargs=None)
+
+
 def ANNSet1_fMRI_lang_top_90():
     return _ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_90',ceiling_s3_kwargs=dict(
         version_id='L49MDfmlJCF7q5TvWI1S0n_NAvfFo5Zg',
