@@ -15,4 +15,8 @@ echo "subj:${ATLAS_ID}"
 conda activate brainscore
 echo $(which python)
 
+# argument is used in the following way
+    #atlas='train.auditory'
+    #benchmark = load_benchmark(f'ANNSet1_fMRI.{atlas}-linear')
+
 python /om2/user/ehoseini/brain-score-language/brainscore_language/benchmarks/ANNSet1_fMRI/ceiling_packagaing.py "$ATLAS_ID"
