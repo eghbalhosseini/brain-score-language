@@ -12,4 +12,4 @@ echo "model_id:${ATLAS_ID}"
 conda activate brainscore
 echo $(which python)
 
-python /om2/user/ehoseini/brain-score-language/brainscore_language/stimulus_sampling/extract_representation_for_UD_corpus.py "$ATLAS_ID"
+python /om2/user/ehoseini/brain-score-language/stimulus_sampling/extract_representation_for_UD_corpus.py "$ATLAS_ID"
