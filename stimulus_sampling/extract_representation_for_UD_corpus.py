@@ -23,7 +23,7 @@ args=parser.parse_args()
 if __name__ == '__main__':
     model_id = int(args.model_id)
     save_path = Path(SAVE_DIR, 'ud_sentencez_data_token_filter_v3_brainscore.pkl')
-    if save_path.exists():
+    if not save_path.exists():
         p=Path(UD_PARENT, 'ud_sentencez_data_token_filter_v3_no_dup.pkl')
         assert p.exists()
         ud_sentences=pd.read_pickle(p.__str__())
@@ -64,3 +64,4 @@ if __name__ == '__main__':
     model_save_path=Path(OUTPUT_DIR,candidate.identifier+'_dataset-ud_sentencez_data_token_filter_v3_brainscore.pkl')
     with open(model_save_path.__str__(), 'wb') as f:
         pickle.dump(predictions, f)
+
