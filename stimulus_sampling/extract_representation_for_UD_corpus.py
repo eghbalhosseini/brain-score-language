@@ -57,11 +57,13 @@ if __name__ == '__main__':
     for stim_id, stim in tqdm(ud_sentences_xr.groupby('stimulus_id'), desc='digest individual sentences'):
         assert len(np.unique(stim.text))==1
         sent_string=np.unique(stim.text)[0]
+        if sent_string[-1]=='.':
+            sent_string=sent_string[:-1]
         prediction = candidate.digest_text(sent_string)['neural']
         prediction['stimulus_id'] = 'presentation', np.unique(stim['stimulus_id'].values)
         predictions.append(prediction)
     predictions = xr.concat(predictions, dim='presentation')
-    model_save_path=Path(OUTPUT_DIR,candidate.identifier+'_dataset-ud_sentencez_data_token_filter_v3_brainscore.pkl')
+    model_save_path=Path(OUTPUT_DIR,candidate.identifier+'_dataset-ud_sentencez_data_token_filter_v3_brainscore_no_dot.pkl')
     with open(model_save_path.__str__(), 'wb') as f:
         pickle.dump(predictions, f)
 
