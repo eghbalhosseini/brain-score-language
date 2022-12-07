@@ -13,4 +13,4 @@ conda activate brainscore
 echo $(which python)
 
 
-python /om2/user/ehoseini/brain-score-language/analysis/compute_benchmark_for_optimized_stimulus_Pereira.py
+python /rdma/vast-rdma/vast/evlab/ehoseini/brain-score-language/analysis/compute_benchmark_for_optimized_stimulus_Pereira.py
