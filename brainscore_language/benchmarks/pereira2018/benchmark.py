@@ -1,8 +1,10 @@
 import logging
 import xarray as xr
 import numpy as np
+import re
 from scipy.stats import median_abs_deviation
-
+import pandas as pd
+from pathlib import Path
 from brainio.assemblies import NeuroidAssembly
 from brainscore_core.benchmarks import BenchmarkBase
 from brainscore_core.metrics import Score
@@ -40,6 +42,38 @@ def Pereira2018_243sentences():
         )
     ))
 
+def Pereira2018_243sentences_ds_max():
+    return _Pereira2018ExperimentSamplerLinear(experiment='243sentences',
+                                               sampler='/om2/user/ehoseini/MyData/brain-score-language/output/ds_max_Ns_100_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-base-uncased_gpt2-xl_ctrl_Pereira2018_language_243sentences.pkl',
+                                               ceiling_s3_kwargs=dict(
+        version_id='CHl_9aFHIWVnPW_njePfy28yzggKuUPw',
+        sha1='5e23de899883828f9c886aec304bc5aa0f58f66c',
+        raw_kwargs=dict(
+            version_id='uZye03ENmn.vKB5mARUGhcIY_DjShtPD',
+            sha1='525a6ac8c14ad826c63fdd71faeefb8ba542d5ac',
+            raw_kwargs=dict(
+                version_id='XVTo58Po5YrNjTuDIWrmfHI0nbN2MVZa',
+                sha1='34ba453dc7e8a19aed18cc9bca160e97b4a80be5'
+            )
+        )
+    ))
+
+def Pereira2018_243sentences_ds_min():
+    return _Pereira2018ExperimentSamplerLinear(experiment='243sentences',
+                                               sampler='/om2/user/ehoseini/MyData/brain-score-language/output/2-ds_max_Ns_100_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-base-uncased_gpt2-xl_ctrl_Pereira2018_language_243sentences.pkl',
+                                               ceiling_s3_kwargs=dict(
+        version_id='CHl_9aFHIWVnPW_njePfy28yzggKuUPw',
+        sha1='5e23de899883828f9c886aec304bc5aa0f58f66c',
+        raw_kwargs=dict(
+            version_id='uZye03ENmn.vKB5mARUGhcIY_DjShtPD',
+            sha1='525a6ac8c14ad826c63fdd71faeefb8ba542d5ac',
+            raw_kwargs=dict(
+                version_id='XVTo58Po5YrNjTuDIWrmfHI0nbN2MVZa',
+                sha1='34ba453dc7e8a19aed18cc9bca160e97b4a80be5'
+            )
+        )
+    ))
+
 
 def Pereira2018_384sentences():
     return _Pereira2018ExperimentLinear(experiment='384sentences', ceiling_s3_kwargs=dict(
@@ -53,8 +87,41 @@ def Pereira2018_384sentences():
                 sha1='fe9fb24b34fd5602e18e34006ac5ccc7d4c825b8'
             )
         )
-    ))
+   ))
 
+
+def Pereira2018_384sentences_ds_max():
+    return _Pereira2018ExperimentSamplerLinear(experiment='384sentences',
+                                               sampler='/om2/user/ehoseini/MyData/brain-score-language/output/ds_max_Ns_100_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-base-uncased_gpt2-xl_ctrl_Pereira2018_language_384sentences.pkl',
+                                               ceiling_s3_kwargs=dict(
+        version_id='sjlnXr5wXUoGv6exoWu06C4kYI0KpZLk',
+        sha1='fc895adc52fd79cea3040961d65d8f736a9d3e29',
+        raw_kwargs=dict(
+            version_id='Hi74r9UKfpK0h0Bjf5DL.JgflGoaknrA',
+            sha1='ce2044a7713426870a44131a99bfc63d8843dae0',
+            raw_kwargs=dict(
+                version_id='m4dq_ouKWZkYtdyNPMSP0p6rqb7wcYpi',
+                sha1='fe9fb24b34fd5602e18e34006ac5ccc7d4c825b8'
+            )
+        )
+    )
+    )
+
+
+def Pereira2018_384sentences_ds_min():
+    return _Pereira2018ExperimentSamplerLinear(experiment='384sentences', ceiling_s3_kwargs=dict(
+        version_id='sjlnXr5wXUoGv6exoWu06C4kYI0KpZLk',
+        sha1='fc895adc52fd79cea3040961d65d8f736a9d3e29',
+        raw_kwargs=dict(
+            version_id='Hi74r9UKfpK0h0Bjf5DL.JgflGoaknrA',
+            sha1='ce2044a7713426870a44131a99bfc63d8843dae0',
+            raw_kwargs=dict(
+                version_id='m4dq_ouKWZkYtdyNPMSP0p6rqb7wcYpi',
+                sha1='fe9fb24b34fd5602e18e34006ac5ccc7d4c825b8'
+            )
+        )
+    ),
+    sampler='/om2/user/ehoseini/MyData/brain-score-language/output/2-ds_max_Ns_100_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-base-uncased_gpt2-xl_ctrl_Pereira2018_language_384sentences.pkl')
 
 class _Pereira2018ExperimentLinear(BenchmarkBase):
     """
@@ -152,3 +219,35 @@ class _Pereira2018ExperimentLinear(BenchmarkBase):
         #score.attrs['description'] = "score aggregated by taking median of neuroids per subject, " \
         #                             "then median of subject scores"
         return score
+
+
+class _Pereira2018ExperimentSamplerLinear(_Pereira2018ExperimentLinear):
+    def __init__(self,experiment: str,sampler:str,ceiling_s3_kwargs: dict):
+
+        self.sampler=sampler
+        self.data = self._load_data(experiment)
+        self.metric = load_metric('linear_pearsonr')
+        data_id=self.data.attrs['identifier']
+        base_identifier = f'Pereira2018.{experiment}-linear'
+        identifier = f'Pereira2018.{experiment}-sampler{data_id}-linear'
+        ceiling = self._load_ceiling(identifier=base_identifier, **ceiling_s3_kwargs)
+        super(_Pereira2018ExperimentSamplerLinear, self).__init__(
+            experiment=experiment, ceiling_s3_kwargs=ceiling_s3_kwargs)
+
+    def _load_data(self, experiment: str) -> NeuroidAssembly:
+        data = load_dataset('Pereira2018.language')
+        sampler_dat=pd.read_pickle(self.sampler)
+        sample_stimulus_id=sampler_dat['coordinates']['stimulus_id']
+        data = data.sel(experiment=experiment)  # filter experiment
+        data = data.dropna('neuroid')  # not all subjects have done both experiments, drop those that haven't
+
+        sample_loc=np.sum([data.stimulus_id.values==x for x in sample_stimulus_id],axis=0).astype(bool)
+        sampler_dat['coordinates']['stimulus']
+        data_sample=data.sel(presentation=sample_loc)
+        assert len([list(data_sample.stimulus.values).index(x) for x in sampler_dat['coordinates']['stimulus']])==len(sample_stimulus_id)
+        # manually get the sampler identifier
+        filename=Path(self.sampler).name
+        res = re.search('roberta',filename)
+        filename[:res.start()-1]
+        data_sample.attrs['identifier'] = f"{data.identifier}.{experiment}.{filename[:res.start()-1]}"
+        return data_sample

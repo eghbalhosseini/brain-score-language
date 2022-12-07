@@ -22,6 +22,9 @@ args=parser.parse_args()
 
 if __name__ == '__main__':
     model_id = int(args.model_id)
+
+
+
     models = ['roberta-base', 'xlm-mlm-en-2048', 'xlnet-large-cased', 'albert-xxlarge-v2', 'bert-base-uncased',
               'gpt2-xl', 'ctrl']
     model=models[model_id]
@@ -41,10 +44,20 @@ if __name__ == '__main__':
         predictions.append(passage_predictions)
     predictions = xr.concat(predictions, dim='presentation')
     data_id=Pereira243_benchmark.data.identifier.replace('.','_')
+
+
     model_save_path=Path(OUTPUT_DIR,candidate.identifier+f'_dataset-{data_id}.pkl')
 
     with open(model_save_path.__str__(), 'wb') as f:
         pickle.dump(predictions, f)
+
+    # save the data
+    save_path = Path(SAVE_DIR, f'{data_id}.pkl')
+    if not save_path.exists():
+        perei=Pereira243_benchmark.data
+        with open(save_path.__str__(), 'wb') as f:
+            pickle.dump(perei, f)
+
     # pereira 384
     Pereira384_benchmark = load_benchmark('Pereira2018.384sentences-linear')
     stimuli = Pereira384_benchmark.data['stimulus']
@@ -62,3 +75,9 @@ if __name__ == '__main__':
 
     with open(model_save_path.__str__(), 'wb') as f:
         pickle.dump(predictions, f)
+
+    save_path = Path(SAVE_DIR, f'{data_id}.pkl')
+    if not save_path.exists():
+        perei = Pereira384_benchmark.data
+        with open(save_path.__str__(), 'wb') as f:
+            pickle.dump(perei, f)
