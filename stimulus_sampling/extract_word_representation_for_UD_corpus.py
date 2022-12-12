@@ -37,7 +37,7 @@ if __name__ == '__main__':
                 print(f'sentence {sent_id} has inconsistent values, dropping it')
         ud_sentences_xr = []
         for sent_id,sent_ in tqdm(enumerate(ud_sentence_clean)):
-            True
+
             sent_pd = pd.DataFrame(sent_)
             sent_pd['stimulus_id']=sent_id
             ud_sentences_xr.append(sent_pd.to_xarray())
@@ -51,26 +51,39 @@ if __name__ == '__main__':
     models = ['roberta-base', 'xlm-mlm-en-2048', 'xlnet-large-cased', 'albert-xxlarge-v2', 'bert-base-uncased',
               'gpt2-xl', 'ctrl']
     model=models[model_id]
-    candidate = load_model(f'{model}')
+    candidate = load_model(f'{model}-layerwise')
+    candidate.basemodel.to(device)
     candidate.start_neural_recording(recording_target=ArtificialSubject.RecordingTarget.language_system,
-                                     recording_type=ArtificialSubject.RecordingType.fMRI)
-
-    predictions = []
+                                     recording_type=ArtificialSubject.RecordingType.ECoG)
+    # go based on text keys
+    predictions_txt = []
+    predictions_space = []
     for stim_id, stim in tqdm(ud_sentences_xr.groupby('stimulus_id'), desc='digest individual sentences'):
         assert len(np.unique(stim.text))==1
-        sent_string=np.unique(stim.text)[0]
-        if sent_string[-1]=='.':
-            sent_string=sent_string[:-1]
-        prediction = candidate.digest_text(sent_string)['neural']
-        prediction['stimulus_id'] = 'presentation', np.unique(stim['stimulus_id'].values)
-        predictions.append(prediction)
-    predictions = xr.concat(predictions, dim='presentation')
-    pred=torch.tensor(predictions.values,device=device)
-    (U,S,V)=torch.pca_lowrank(pred,q=500)
-    var_explained_curve=torch.cumsum(S ** 2, dim=0) / torch.sum(S ** 2)
-    plt.plot(var_explained_curve.cpu())
-    plt.show()
-    model_save_path=Path(OUTPUT_DIR,candidate.identifier+'_dataset-ud_sentencez_data_token_filter_v3_brainscore_no_dot.pkl')
-    with open(model_save_path.__str__(), 'wb') as f:
-        pickle.dump(predictions, f)
+        sent_string = np.unique(stim.text)[0]
+        if sent_string[-1] == '.':
+            sent_string = sent_string[:-1]
+        text_space = sent_string.split(' ')
+        text_key=list(stim.word_string.values)
+        # key
+        prediction = candidate.digest_text(text_key)['neural']
+        prediction['stimulus_id'] = 'presentation', np.repeat(np.unique(stim['stimulus_id'].values),prediction.shape[0])
+        predictions_txt.append(prediction)
+        # text
+        del prediction
+        prediction = candidate.digest_text(text_space)['neural']
+        prediction['stimulus_id'] = 'presentation', np.repeat(np.unique(stim['stimulus_id'].values),
+                                                              prediction.shape[0])
+        predictions_space.append(prediction)
 
+    predictions_txt = xr.concat(predictions_txt, dim='presentation')
+    predictions_space = xr.concat(predictions_space, dim='presentation')
+
+
+    model_save_path=Path(OUTPUT_DIR,f"{candidate.identifier}_{candidate.neural_recordings[0][1]}_key_dataset-ud_sentencez_data_token_filter_v3_brainscore_no_dot.pkl")
+    with open(model_save_path.__str__(), 'wb') as f:
+        pickle.dump(predictions_txt, f)
+
+    model_save_path=Path(OUTPUT_DIR,f"{candidate.identifier}_{candidate.neural_recordings[0][1]}_space_dataset-ud_sentencez_data_token_filter_v3_brainscore_no_dot.pkl")
+    with open(model_save_path.__str__(), 'wb') as f:
+        pickle.dump(predictions_space, f)
