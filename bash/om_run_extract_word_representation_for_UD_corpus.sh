@@ -6,6 +6,7 @@
 #SBATCH --mem=120G
 #SBATCH --exclude node017,node018
 #SBATCH --mail-type=ALL
+#SBATCH --partition=evlab
 
 ATLAS_ID=$1
 echo "model_id:${ATLAS_ID}"
