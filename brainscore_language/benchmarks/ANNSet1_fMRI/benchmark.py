@@ -32,6 +32,37 @@ def ANNSet1_fMRI_auditory_V2():
 def ANNSet1_fMRI_visual_V2():
     return _ANNSet1_fMRI_ExperimentLinear(atlas='best.visual_V2',ceiling_s3_kwargs=None)
 
+def ANNSet1_fMRI_WOPeriod_lang_top_90_V2():
+    return _ANNSet1_fMRI_without_period(atlas='best.language_top_90_V2',ceiling_s3_kwargs=None)
+
+def ANNSet1_fMRI_WOPeriod_lang_top_80_V2():
+    return _ANNSet1_fMRI_without_period(atlas='best.language_top_80_V2',ceiling_s3_kwargs=None)
+
+def ANNSet1_fMRI_WOPeriod_lang_top_70_V2():
+    return _ANNSet1_fMRI_without_period(atlas='best.language_top_70_V2',ceiling_s3_kwargs=None)
+
+
+def ANNSet1_fMRI_WOPeriod_lang_top_90():
+    return _ANNSet1_fMRI_without_period(atlas='train.language_top_90',ceiling_s3_kwargs=dict(
+        version_id='L49MDfmlJCF7q5TvWI1S0n_NAvfFo5Zg',
+        sha1='4c499cfa5491d75d93fc29d1e18ff12771b2bdbf',
+        raw_kwargs=dict(version_id='eErH0hqDvGrUo5o79L1b4eqECXDzSlub',
+            sha1='31f6035ae2d7f3734292ff4d35fccf7e92bd19ce')))
+
+def ANNSet1_fMRI_WOPeriod_lang_top_80():
+    return _ANNSet1_fMRI_without_period(atlas='train.language_top_80',ceiling_s3_kwargs=dict(
+        version_id='jY_VtNFAUAp5tkUgb250FVJJsO5b1Ppk',
+        sha1='04a049aa9ab2c79c9354ea7d2176661b9b7af6d2',
+        raw_kwargs=dict(version_id='59CR3B6xplPqoiR.mG2arR9hLOXsjnhb',
+            sha1='ad897894978dbaaa177d2a8c696db2395f56aa02')))
+
+def ANNSet1_fMRI_WOPeriod_lang_top_70():
+    return _ANNSet1_fMRI_without_period(atlas='train.language_top_70',ceiling_s3_kwargs=dict(
+        version_id='O4XoVlc7bQDZle2gclmYQegkKLB6xCfI',
+        sha1='84dac3d377c8a92050b04d8bb4746768f9e6f10d',
+        raw_kwargs=dict(version_id='oIjZn35kUmuO0_AbmY1vLMS9pvl3uu_F',
+            sha1='4762e990fa66a9b93c9e5e6c5dfdf94602021d0c')))
+
 
 def ANNSet1_fMRI_lang_top_90():
     return _ANNSet1_fMRI_ExperimentLinear(atlas='train.language_top_90',ceiling_s3_kwargs=dict(
@@ -145,3 +176,57 @@ class _ANNSet1_fMRI_ExperimentLinear(BenchmarkBase):
         return score
 
 
+class _ANNSet1_fMRI_without_period(_ANNSet1_fMRI_ExperimentLinear):
+    def __init__(self, atlas:str,ceiling_s3_kwargs: dict ):
+        self.data = self._load_data(atlas)
+        self.metric = load_metric('linear_pearsonr')
+        identifier = f'ANNSet1_fMRI_no_period.{atlas}-linear'
+        ceiling = None if not ceiling_s3_kwargs else self._load_ceiling(identifier=identifier, **ceiling_s3_kwargs)
+
+        super(_ANNSet1_fMRI_without_period, self).__init__(
+            atlas=atlas, ceiling_s3_kwargs=ceiling_s3_kwargs)
+    def __call__(self, candidate: ArtificialSubject, *args, **kwargs):
+        candidate.start_neural_recording(recording_target=ArtificialSubject.RecordingTarget.language_system,
+                                         recording_type=ArtificialSubject.RecordingType.fMRI)
+        stimuli = self.data['stimulus']
+        predictions = []
+        for stim_id, stim in tqdm(stimuli.groupby('stimulus_id'), desc='digest individual sentences'):
+            stimulus_string=str(stim.values)
+            if stimulus_string[-1] == '.':
+                stimulus_string = stimulus_string[:-1]
+            prediction = candidate.digest_text(stimulus_string)['neural']
+            prediction['stimulus_id'] = 'presentation', stim['stimulus_id'].values
+            predictions.append(prediction)
+        predictions = xr.concat(predictions, dim='presentation')
+        assert np.array_equal(predictions.stimulus_id.values, self.data.stimulus_id.values)
+
+        raw_scores = []
+        for layer_id, prediction in predictions.groupby('layer'):
+            raw_score = self.metric(prediction, self.data)
+            raw_scores.append(raw_score.raw.expand_dims(dim={"layer": [layer_id]}, axis=0))
+        raw_scores = xr.concat(raw_scores, dim='layer')
+        score = raw_scores.mean('split')
+        score = score.groupby('subject').median()
+        center = score.median('subject')
+        subject_values = np.nan_to_num(score.values,
+                                       nan=0)  # mad cannot deal with all-nan in one axis, treat as 0
+        subject_axis = score.dims.index(score['subject'].dims[0])
+        error = median_abs_deviation(subject_values, axis=subject_axis)
+        # ceiling normalize
+        scores = []
+        if self.ceiling is None:
+            scores = center
+        else:
+            for l, sc in center.groupby('layer'):
+                sc = ceiling_normalize(sc, self.ceiling)
+                scores.append(sc)
+            scores = xr.concat(scores, dim='layer')
+
+        score = Score([scores.values, error], coords={'aggregation': ['center', 'error'],
+                                                      'layer': scores.layer.values},
+                      dims=['aggregation', 'layer'])
+        score.attrs['raw'] = raw_scores
+        score.attrs['description'] = "score aggregated by taking median of neuroids per subject, " \
+                                     "then median of subject scores"
+
+        return score
