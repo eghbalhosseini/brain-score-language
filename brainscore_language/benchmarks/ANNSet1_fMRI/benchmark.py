@@ -181,7 +181,6 @@ class _ANNSet1_fMRI_without_period(_ANNSet1_fMRI_ExperimentLinear):
         self.data = self._load_data(atlas)
         self.metric = load_metric('linear_pearsonr')
         identifier = f'ANNSet1_fMRI_no_period.{atlas}-linear'
-        self.identifier=identifier
         base_identifier=f'ANNSet1_fMRI.{atlas}-linear'
         ceiling = None if not ceiling_s3_kwargs else self._load_ceiling(identifier=base_identifier, **ceiling_s3_kwargs)
 
