@@ -181,10 +181,14 @@ class _ANNSet1_fMRI_without_period(_ANNSet1_fMRI_ExperimentLinear):
         self.data = self._load_data(atlas)
         self.metric = load_metric('linear_pearsonr')
         identifier = f'ANNSet1_fMRI_no_period.{atlas}-linear'
-        ceiling = None if not ceiling_s3_kwargs else self._load_ceiling(identifier=identifier, **ceiling_s3_kwargs)
+        self.identifier=identifier
+        base_identifier=f'ANNSet1_fMRI.{atlas}-linear'
+        ceiling = None if not ceiling_s3_kwargs else self._load_ceiling(identifier=base_identifier, **ceiling_s3_kwargs)
 
         super(_ANNSet1_fMRI_without_period, self).__init__(
             atlas=atlas, ceiling_s3_kwargs=ceiling_s3_kwargs)
+
+
     def __call__(self, candidate: ArtificialSubject, *args, **kwargs):
         candidate.start_neural_recording(recording_target=ArtificialSubject.RecordingTarget.language_system,
                                          recording_type=ArtificialSubject.RecordingType.fMRI)
