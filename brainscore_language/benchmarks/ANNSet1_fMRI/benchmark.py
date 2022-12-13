@@ -194,7 +194,7 @@ class _ANNSet1_fMRI_without_period(_ANNSet1_fMRI_ExperimentLinear):
         stimuli = self.data['stimulus']
         predictions = []
         for stim_id, stim in tqdm(stimuli.groupby('stimulus_id'), desc='digest individual sentences'):
-            stimulus_string=str(stim.values)
+            stimulus_string=str(stim.values[0])
             if stimulus_string[-1] == '.':
                 stimulus_string = stimulus_string[:-1]
             prediction = candidate.digest_text(stimulus_string)['neural']

@@ -11,25 +11,28 @@ if __name__ == '__main__':
     ANNSet1 = load_benchmark('ANNSet1_fMRI_WOPeriod.train.language_top_90-linear')
     models = ['roberta-base','xlm-mlm-en-2048','xlnet-large-cased','albert-xxlarge-v2','bert-base-uncased','gpt2-xl','ctrl']
     for model in models:
+        True
         candidate = load_model(f'{model}')
-        benchmark_id=ANNSet1.identifier.replace('.','_')
+        # benchmark_id=ANNSet1.identifier.replace('.','_')
 
-        save_path=Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{candidate.identifier}_{benchmark_id}_scores.pkl')
-        if not save_path.exists():
-            model_score = ANNSet1(candidate)
-            with open(save_path.__str__(), 'wb') as f:
-                pickle.dump(model_score, f)
-        else:
-            model_score=pd.read_pickle(save_path)
-        # reorder scores based on layer numbers
-        if model=='albert-xxlarge-v2':
-            layer_loc=[int(re.findall(r'groups.\d+',x)[0].lstrip('groups.'))+1 if len(re.findall(r'groups.\d+',x))>0 else 0 for x in model_score.layer.values ]
-            reorder=np.argsort(layer_loc)
-        else:
-            ordered_layers=[x[0] for x in candidate.basemodel.named_modules()]
-            layer_loc=[ordered_layers.index(x) for x in model_score.layer.values]
-            reorder=np.argsort(layer_loc)
-        width = 0.7 # the width of the bars
+        model_score = ANNSet1(candidate)
+        #
+        # save_path=Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{candidate.identifier}_{benchmark_id}_scores.pkl')
+        # if not save_path.exists():
+        #     model_score = ANNSet1(candidate)
+        #     with open(save_path.__str__(), 'wb') as f:
+        #         pickle.dump(model_score, f)
+        # else:
+        #     model_score=pd.read_pickle(save_path)
+        # # reorder scores based on layer numbers
+        # if model=='albert-xxlarge-v2':
+        #     layer_loc=[int(re.findall(r'groups.\d+',x)[0].lstrip('groups.'))+1 if len(re.findall(r'groups.\d+',x))>0 else 0 for x in model_score.layer.values ]
+        #     reorder=np.argsort(layer_loc)
+        # else:
+        #     ordered_layers=[x[0] for x in candidate.basemodel.named_modules()]
+        #     layer_loc=[ordered_layers.index(x) for x in model_score.layer.values]
+        #     reorder=np.argsort(layer_loc)
+        # width = 0.7 # the width of the bars
         fig = plt.figure(figsize=(11, 8))
         ax = plt.axes((.1, .4, .55, .35))
         x=np.arange(model_score.shape[1])
