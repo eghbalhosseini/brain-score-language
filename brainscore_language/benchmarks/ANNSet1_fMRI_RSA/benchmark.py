@@ -133,35 +133,11 @@ class _ANNSet1_fMRI_ExperimentRSA(BenchmarkBase):
                           'neuron_number_in_layer': predictions.neuron_number_in_layer.values}
         predictions_rsd=rsd.Dataset(predictions.values, descriptors=descriptors,
                     obs_descriptors=obs_descriptors,channel_descriptors=ch_descriptors)
-        # assert np.array_equal(predictions.stimulus_id.values, self.data.stimulus_id.values)
-        #
-        # raw_scores=[]
-        # for layer_id, prediction in predictions.groupby('layer'):
-        #     raw_score = self.metric(prediction, self.data)
-        #     raw_scores.append(raw_score.raw.expand_dims(dim={"layer":[layer_id]},axis=0))
-        # raw_scores = xr.concat(raw_scores, dim='layer')
-        # score = raw_scores.mean('split')
-        # score = score.groupby('subject').median()
-        # center = score.median('subject')
-        # subject_values = np.nan_to_num(score.values,
-        #                                nan=0)  # mad cannot deal with all-nan in one axis, treat as 0
-        # subject_axis = score.dims.index(score['subject'].dims[0])
-        # error = median_abs_deviation(subject_values, axis=subject_axis)
-        # # ceiling normalize
-        # scores=[]
-        # if self.ceiling is None:
-        #     scores = center
-        # else:
-        #     for l,sc in center.groupby('layer'):
-        #         sc = ceiling_normalize(sc, self.ceiling)
-        #         scores.append(sc)
-        #     scores=xr.concat(scores,dim='layer')
-        #
-        # score = Score([scores.values, error], coords={'aggregation': ['center', 'error'],
-        #                                        'layer':scores.layer.values},
-        #               dims=['aggregation','layer'])
-        # score.attrs['raw'] = raw_scores
-        # score.attrs['description'] = "score aggregated by taking median of neuroids per subject, " \
-        #                              "then median of subject scores"
-        #
-        # return score
+
+        raw_score = self.metric(predictions_rsd, self.data)
+        score = Score([raw_score.get_means(), raw_score.get_errorbars()[0]], coords={'aggregation': ['center', 'error'],},
+                       dims=['aggregation','layer'])
+        score.attrs['raw'] = raw_score
+        score.attrs['noise_ceiling']=raw_score.get_noise_ceil()
+
+        return score
