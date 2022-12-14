@@ -15,7 +15,6 @@ class Defaults:
     neuroid_dim = 'neuroid'
     neuroid_coord = 'neuroid_id'
 
-
 class XarrayRSA:
     def __init__(self, expected_dims=Defaults.expected_dims, neuroid_dim=Defaults.neuroid_dim,
                  neuroid_coord=Defaults.neuroid_coord, stimulus_coord=Defaults.stimulus_coord):
@@ -47,7 +46,6 @@ class XarrayRSA:
         NotImplementedError
 
     def __call__(self,source,target, *args, **kwargs):
-        NotImplementedError
         # 1. turn get rsa dissimilarities
         #TODO : make this more flexible to do more type of rdm
         target_rdm = rsatoolbox.rdm.calc_rdm(target, method='crossnobis',descriptor='stimulus_id',cv_descriptor='session')
