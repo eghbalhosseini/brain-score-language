@@ -12,6 +12,8 @@ from brainscore_language import load_dataset, load_metric
 from brainscore_language.artificial_subject import ArtificialSubject
 from brainscore_language.utils.ceiling import ceiling_normalize
 from brainscore_language.utils.s3 import load_from_s3
+import torch
+device =torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 logger = logging.getLogger(__name__)
 
