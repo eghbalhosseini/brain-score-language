@@ -1,14 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
+
 from brainscore_language import load_benchmark,load_model
 from pathlib import Path
 import pickle
+from scipy.stats import median_abs_deviation
 
 # load benchmark
 ANNSet1=load_benchmark('ANNSet1_fMRI.train.language_top_90-linear')
 Pereira234=load_benchmark('Pereira2018.243sentences-linear')
 Pereira384=load_benchmark('Pereira2018.384sentences-linear')
-
 
 # load model
 # 1.
@@ -217,13 +219,36 @@ def plot_scores_against_repetition_ratio(model_score,save_name):
     fig.savefig(save_loc.__str__(), format='eps',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
 
 if __name__ == '__main__':
-    plot_scores_against_repetition_ratio(roberta_score, 'roberta-base')
-    plot_scores_against_repetition_ratio(xlm_score,'xlm-mlm-en-2048')
-    plot_scores_against_repetition_ratio(xlnet_score, 'xlnet-large-cased')
-    plot_scores_against_repetition_ratio(albert_score, 'albert-xxlarge-v2')
-    plot_scores_against_repetition_ratio(bert_score, 'bert-base-uncased')
-    plot_scores_against_repetition_ratio(gpt2_score, 'gpt2-xl')
-    plot_scores_against_repetition_ratio(ctrl_score, 'ctrl')
+    models=['roberta','xlm','xlnet','albert','bert','gpt2','ctrl']
+    model_pereira_scores=[]
+    model_ANN_score=[]
+    for model in models:
+        save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score_p234.pkl')
+        assert save_dir.exists()
+        a=pd.read_pickle(save_dir.__str__())
+        save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score_p384.pkl')
+        assert save_dir.exists()
+        b=pd.read_pickle(save_dir.__str__())
+        model_pereira_scores.append([a,b])
+        save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score_ANN.pkl')
+        assert save_dir.exists()
+        c=pd.read_pickle(save_dir)
+        model_ANN_score.append(c)
+
+
+    # do a glove metric
+    glove=load_model('glove-840b')
+    random_emb=load_model('randomembedding-1600')
+
+    # plot_scores_against_repetition_ratio(roberta_score, 'roberta-base')
+    # plot_scores_against_repetition_ratio(xlm_score,'xlm-mlm-en-2048')
+    # plot_scores_against_repetition_ratio(xlnet_score, 'xlnet-large-cased')
+    # plot_scores_against_repetition_ratio(albert_score, 'albert-xxlarge-v2')
+    # plot_scores_against_repetition_ratio(bert_score, 'bert-base-uncased')
+    # plot_scores_against_repetition_ratio(gpt2_score, 'gpt2-xl')
+    # plot_scores_against_repetition_ratio(ctrl_score, 'ctrl')
+
+
     #
     model_Pereira=[ np.mean([roberta_score_p234.values,roberta_score_p384.values]),
                     np.mean([xlm_score_p234.values, xlm_score_p234.values]),

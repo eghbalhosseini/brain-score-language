@@ -12,6 +12,7 @@ _logger = logging.getLogger(__name__)
 
 def _prepare_weights(name):
     weights_file = Path(__file__).parent / f'{name}.txt'
+    print(f'{weights_file}')
     if not weights_file.is_file():
         # download zip
         zip_filename = f"{name}.zip"
