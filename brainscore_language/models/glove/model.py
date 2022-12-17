@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 def _prepare_weights(name):
     weights_file = Path(__file__).parent / f'{name}.txt'
     print(f'{weights_file}')
-    if not weights_file.is_file():
+    if not weights_file.exists():
         # download zip
         zip_filename = f"{name}.zip"
         url = f'https://nlp.stanford.edu/data/{zip_filename}'
