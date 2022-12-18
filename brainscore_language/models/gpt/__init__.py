@@ -26,3 +26,12 @@ model_registry['gpt2-xl'] = lambda: HuggingfaceSubject(model_id='gpt2-xl', regio
 
 model_registry['gpt2-xl-layerwise'] = lambda: HuggingfaceGroup(model_id='gpt2-xl', region_layer_mapping={
     ArtificialSubject.RecordingTarget.language_system: get_layer_names('gpt2-xl')})
+
+model_registry['gpt2-layerwise'] = lambda: HuggingfaceGroup(model_id='gpt2', region_layer_mapping={
+    ArtificialSubject.RecordingTarget.language_system: get_layer_names('gpt2')})
+
+model_registry['gpt2-medium-layerwise'] = lambda: HuggingfaceGroup(model_id='gpt2-medium', region_layer_mapping={
+    ArtificialSubject.RecordingTarget.language_system: get_layer_names('gpt2-medium')})
+
+model_registry['gpt2-large-layerwise'] = lambda: HuggingfaceGroup(model_id='gpt2-large', region_layer_mapping={
+    ArtificialSubject.RecordingTarget.language_system: get_layer_names('gpt2-large')})
