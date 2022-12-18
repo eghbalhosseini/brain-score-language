@@ -48,7 +48,7 @@ class XarrayRSA:
     def __call__(self,source,target, *args, **kwargs):
         # 1. turn get rsa dissimilarities
         #TODO : make this more flexible to do more type of rdm
-        target_rdm = rsatoolbox.rdm.calc_rdm(target, method='crossnobis',descriptor='stimulus_id',cv_descriptor='session')
+        #target_rdm = rsatoolbox.rdm.calc_rdm(target, method='crossnobis',descriptor='stimulus_id',cv_descriptor='session')
         target_rdm = rsatoolbox.rdm.calc_rdm(target, method='correlation', descriptor='stimulus_id')
         # 2. get source and turn into rdm
         source_rdm = rsatoolbox.rdm.calc_rdm(source, method='correlation')

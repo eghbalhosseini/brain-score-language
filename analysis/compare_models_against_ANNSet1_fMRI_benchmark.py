@@ -237,9 +237,11 @@ if __name__ == '__main__':
 
 
     # do a glove metric
-    glove=load_model('glove-840b')
-    random_emb=load_model('randomembedding-1600')
-
+    ANNSet1 = load_benchmark('ANNSet1_fMRI.train.language_top_90-linear')
+    Pereira234 = load_benchmark('Pereira2018.243sentences-linear')
+    Pereira384 = load_benchmark('Pereira2018.384sentences-linear')
+    model_score_pereira=pd.read_pickle('/om/user/ehoseini/MyData/fmri_DNN/outputs/model_scores_pereira.pkl')
+    model_Pereira = [np.mean([x.values for x in y]) for y in model_score_pereira]
     # plot_scores_against_repetition_ratio(roberta_score, 'roberta-base')
     # plot_scores_against_repetition_ratio(xlm_score,'xlm-mlm-en-2048')
     # plot_scores_against_repetition_ratio(xlnet_score, 'xlnet-large-cased')
@@ -250,28 +252,11 @@ if __name__ == '__main__':
 
 
     #
-    model_Pereira=[ np.mean([roberta_score_p234.values,roberta_score_p384.values]),
-                    np.mean([xlm_score_p234.values, xlm_score_p234.values]),
-                    np.mean([xlnet_score_p234.values, xlnet_score_p384.values]),
-                    np.mean([albert_score_p234.values, albert_score_p234.values]),
-                    np.mean([bert_score_p234.values, bert_score_p384.values]),
-                    np.mean([gpt2_score_p234.values, gpt2_score_p384.values]),
-                    np.mean([ctrl_score_p234.values, ctrl_score_p384.values])]
 
-    model_ANNSet1=[ roberta_score.values[0],
-                    xlm_score.values[0],
-                    xlnet_score.values[0],
-                    albert_score.values[0],
-                    bert_score.values[0],
-                    gpt2_score.values[0],
-                    ctrl_score.values[0]]
-    model_ANNSet1_err=[ roberta_score.values[1],
-                    xlm_score.values[1],
-                    xlnet_score.values[1],
-                    albert_score.values[1],
-                    bert_score.values[1],
-                    gpt2_score.values[1],
-                    ctrl_score.values[1]]
+
+    model_ANNSet1=[ x.values[0] for x in model_ANN_score]
+
+    model_ANNSet1_err=[ x.values[1] for x in model_ANN_score]
 
 
     labels = ['roberta-base','xlm-mlm-en-2048','xlnet-large-cased','albert-xxlarge-v2','bert-base-uncased','gpt2-xl','ctrl']
@@ -308,4 +293,4 @@ if __name__ == '__main__':
     fig.savefig(save_loc.__str__(), dpi=250,format='png',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
 
     save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/ANNSet1_vs_Pereira_performance_all_models.eps')
-    fig.savefig(save_loc.__str__(), dpi=250,format='png',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
+    fig.savefig(save_loc.__str__(), format='eps',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
