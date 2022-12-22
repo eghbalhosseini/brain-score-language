@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from brainscore_language import load_benchmark,load_model, ArtificialSubject
+from brainscore_language import load_benchmark,load_model, ArtificialSubject, load_dataset
 from pathlib import Path
 import pickle
 import numpy as np
@@ -23,7 +23,7 @@ args=parser.parse_args()
 
 if __name__ == '__main__':
     model_id = int(args.model_id)
-    save_path = Path(SAVE_DIR, 'ud_sentencez_data_token_filter_v3_brainscore_no_dot.pkl')
+    save_path = Path(SAVE_DIR, 'ud_sentencez_data_token_filter_v3_brainscore_WO_ANNSet1.pkl')
     if not save_path.exists():
         p=Path(UD_PARENT, 'ud_sentencez_data_token_filter_v3_no_dup.pkl')
         assert p.exists()
@@ -35,6 +35,14 @@ if __name__ == '__main__':
                 ud_sentence_clean.append(sent_)
             else:
                 print(f'sentence {sent_id} has inconsistent values, dropping it')
+        # drop annset 1
+        ud_text=[x['text'] for x in ud_sentence_clean]
+        ANNdata=load_dataset('ANNSet1_fMRI.train.language_top_90')
+        drop_sent_id=[]
+        for sent in ANNdata.sentence:
+            drop_sent_id.append(ud_text.index(sent.values))
+        clean_WO_ANNSet1_id=set(np.arange(len(ud_sentence_clean)))-set(drop_sent_id)
+        ud_sentence_clean=[ud_sentence_clean[x] for x in clean_WO_ANNSet1_id]
         ud_sentences_xr = []
         for sent_id,sent_ in tqdm(enumerate(ud_sentence_clean)):
             True
@@ -59,18 +67,18 @@ if __name__ == '__main__':
     for stim_id, stim in tqdm(ud_sentences_xr.groupby('stimulus_id'), desc='digest individual sentences'):
         assert len(np.unique(stim.text))==1
         sent_string=np.unique(stim.text)[0]
-        if sent_string[-1]=='.':
-            sent_string=sent_string[:-1]
+        #if sent_string[-1]=='.':
+        #    sent_string=sent_string[:-1]
         prediction = candidate.digest_text(sent_string)['neural']
         prediction['stimulus_id'] = 'presentation', np.unique(stim['stimulus_id'].values)
         predictions.append(prediction)
     predictions = xr.concat(predictions, dim='presentation')
-    pred=torch.tensor(predictions.values,device=device)
-    (U,S,V)=torch.pca_lowrank(pred,q=500)
-    var_explained_curve=torch.cumsum(S ** 2, dim=0) / torch.sum(S ** 2)
-    plt.plot(var_explained_curve.cpu())
-    plt.show()
-    model_save_path=Path(OUTPUT_DIR,candidate.identifier+'_dataset-ud_sentencez_data_token_filter_v3_brainscore_no_dot.pkl')
+    #pred=torch.tensor(predictions.values,device=device)
+    #(U,S,V)=torch.pca_lowrank(pred,q=500)
+    #var_explained_curve=torch.cumsum(S ** 2, dim=0) / torch.sum(S ** 2)
+    #plt.plot(var_explained_curve.cpu())
+    #plt.show()
+    model_save_path=Path(OUTPUT_DIR,candidate.identifier+'_dataset-ud_sentencez_data_token_filter_v3_brainscore_WO_ANNSet1.pkl')
     with open(model_save_path.__str__(), 'wb') as f:
         pickle.dump(predictions, f)
 

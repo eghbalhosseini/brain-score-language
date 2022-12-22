@@ -29,7 +29,7 @@ if __name__ == '__main__':
     model_scores_pereira_243_ds_min=[]
     model_scores_pereira_243_ds_min_rand=[]
     kk_val=[150,200]
-    kk=1
+    kk=0
     for model in models:
         model_scores_pereira_384_ds_max.append(pd.read_pickle(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score384_ds_max.pkl')[kk])
         model_scores_pereira_384_ds_max_rand.append(pd.read_pickle(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score384_ds_max_rand.pkl')[kk])
@@ -215,4 +215,104 @@ if __name__ == '__main__':
     save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_comp_{kk_val[kk]}.eps')
     fig.savefig(save_loc.__str__(), format='eps', metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto',
                 edgecolor='auto', backend=None)
+
+
+    # plot sampler resutls
+
+    Pereria384_ds_max = load_benchmark(f'Pereira2018.384sentences.ds.max.150-linear')
+    Pereria384_ds_min = load_benchmark(f'Pereira2018.384sentences.ds.min.150-linear')
+    Pereria384_ds_max_rand =load_benchmark(f'Pereira2018.384sentences.ds.max.150.rand.0-linear')
+
+
+    Pereria243_ds_max = load_benchmark(f'Pereira2018.243sentences.ds.max.150-linear')
+    Pereria243_ds_max_rand =load_benchmark(f'Pereira2018.243sentences.ds.max.150.rand.0-linear')
+    Pereria243_ds_min = load_benchmark(f'Pereira2018.243sentences.ds.min.150-linear')
+    Pereria243_ds_min_rand = [load_benchmark(f'Pereira2018.243sentences.ds.min.{x}.rand.0-linear') for x in [150, 200]]
+
+    xx=pd.read_pickle(Pereria384_ds_max.sampler)
+    xx_min = pd.read_pickle(Pereria384_ds_min.sampler)
+    xx_rand = pd.read_pickle(Pereria384_ds_max_rand.sampler)
+
+    yy = pd.read_pickle(Pereria243_ds_max.sampler)
+    yy_min = pd.read_pickle(Pereria243_ds_min.sampler)
+    yy_rand=pd.read_pickle(Pereria243_ds_max_rand.sampler)
+
+
+
+    fig = plt.figure(figsize=(11, 8))
+    ax = plt.axes((.1, .4, .35, .35))
+    rects1 = ax.plot(np.cumsum(xx["Ds_trajectory"][:,1]),(xx["Ds_trajectory"][:,2]), color='r')
+    rects1 = ax.plot(np.cumsum(xx_min["Ds_trajectory"][:, 1]), 2-(xx_min["Ds_trajectory"][:, 2]), color='b')
+
+    rects1 = ax.plot(np.cumsum(yy["Ds_trajectory"][:, 1]), (yy["Ds_trajectory"][:, 2]), color='r')
+    rects1 = ax.plot(np.cumsum(yy_min["Ds_trajectory"][:, 1]), 2 - (yy_min["Ds_trajectory"][:, 2]), color='b')
+
+    #ax.set_xscale('log')
+    fig.show()
+
+    fig = plt.figure(figsize=(11, 8), dpi=300, frameon=False)
+    ax = plt.axes((.2, .1, .08, .45))
+    ax.scatter(.1 * np.random.normal(size=(np.asarray(xx_rand['Ds_trajectory']).shape)) + 0, np.asarray(xx_rand['Ds_trajectory']),
+               color=(.6, .6, .6), s=2, alpha=.3)
+    ax.scatter(0, np.asarray(xx_rand['Ds_trajectory']).mean(), color=np.divide((55, 76, 128), 256), s=50, label='random',edgecolor='k')
+    ax.scatter(0, 2-xx_min['Ds'], color=np.divide((188, 80, 144), 255), s=50, label='Ds_min',edgecolor='k')
+    ax.scatter(0, xx['Ds'], color=np.divide((255, 128, 0), 255), s=50, label='Ds_max',edgecolor='k')
+
+    ax.scatter(.1 * np.random.normal(size=(np.asarray(yy_rand['Ds_trajectory']).shape)) + 2,
+               np.asarray(yy_rand['Ds_trajectory']),
+               color=(.6, .6, .6), s=2, alpha=.3)
+    ax.scatter(2, np.asarray(yy_rand['Ds_trajectory']).mean(), color=np.divide((55, 76, 128), 256), s=50,edgecolor='k')
+    ax.scatter(2, 2 - yy_min['Ds'], color=np.divide((188, 80, 144), 255), s=50,edgecolor='k')
+    ax.scatter(2, yy['Ds'], color=np.divide((255, 128, 0), 255), s=50,edgecolor='k')
+
+    tick_l = ['384','243']
+    tick = [0,2]
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_linewidth(1)
+    ax.spines['left'].set_linewidth(1)
+    ax.set_xlim((-.8, 2.8))
+    ax.set_ylim((.5, 1.1))
+    ax.set_xticks(tick)
+    ax.set_xticklabels(tick_l)
+    ax.set_xlabel('# Sentences')
+    ax.legend(bbox_to_anchor=(1.7, 1.1), frameon=True)
+    ax.set_ylabel(r'$D_s$')
+
+    ax.tick_params(direction='out', length=3, width=2, colors='k',
+                   grid_color='k', grid_alpha=0.5)
+
+    ax = plt.axes((.35, .1, .3, .15))
+    rects1 = ax.plot(np.cumsum(xx["Ds_trajectory"][:,1]),(xx["Ds_trajectory"][:,2]), color=np.divide((255, 128, 0), 255),linewidth=3)
+    rects1 = ax.plot(np.cumsum(xx_min["Ds_trajectory"][:, 1]), 2-(xx_min["Ds_trajectory"][:, 2]), color=np.divide((188, 80, 144), 255),linewidth=3)
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_linewidth(1)
+    ax.spines['left'].set_linewidth(1)
+    ax.set_ylim((.5, 1.1))
+    ax.set_title('384 sentence optimization (n=150)')
+
+    ax = plt.axes((.35, .35, .3, .15))
+    rects1 = ax.plot(np.cumsum(yy["Ds_trajectory"][:,1]),(yy["Ds_trajectory"][:,2]), color=np.divide((255, 128, 0), 255),linewidth=3)
+    rects1 = ax.plot(np.cumsum(yy_min["Ds_trajectory"][:, 1]), 2-(yy_min["Ds_trajectory"][:, 2]), color=np.divide((188, 80, 144), 255),linewidth=3)
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_linewidth(1)
+    ax.spines['left'].set_linewidth(1)
+    ax.set_ylim((.5, 1.1))
+    ax.set_title('243 sentence optimization (n=150)')
+
+    fig.show()
+
+    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_optim_res.png')
+    fig.savefig(save_loc.__str__(), dpi=250, format='png', metadata=None, bbox_inches=None, pad_inches=0.1,
+                facecolor='auto', edgecolor='auto', backend=None)
+
+    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_optim_res.eps')
+    fig.savefig(save_loc.__str__(), format='eps', metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto',
+                edgecolor='auto', backend=None)
+
 
