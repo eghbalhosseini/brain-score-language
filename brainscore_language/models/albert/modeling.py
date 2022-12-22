@@ -53,6 +53,7 @@ class ALBERTSubject(HuggingfaceSubject):
 
             base_output=base_output_and_hidden['logits']
             base_hidden=base_output_and_hidden['hidden_states']
+            base_hidden = [x.cpu() for x in base_hidden]
             assert(len(base_hidden)==len(self.layers_names))
             layer_representations=self.get_hooks(base_hidden,layer_representations)
             # format output
