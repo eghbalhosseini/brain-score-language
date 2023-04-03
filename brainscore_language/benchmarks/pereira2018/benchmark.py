@@ -46,7 +46,7 @@ def Pereira2018_243sentences():
 
 def Pereira2018_243sentences_ds_max(samples=100):
     return _Pereira2018ExperimentSamplerLinear(experiment='243sentences',
-                                               sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/ds_max_Ns_{samples}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-base-uncased_gpt2-xl_ctrl_Pereira2018_language_243sentences.pkl',
+                                               sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/ds_max_Ns_{samples}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-large-uncased-whole-word-masking_gpt2-xl_ctrl_Pereira2018_language_243sentences.pkl',
                                                ceiling_s3_kwargs=dict(
         version_id='CHl_9aFHIWVnPW_njePfy28yzggKuUPw',
         sha1='5e23de899883828f9c886aec304bc5aa0f58f66c',
@@ -61,7 +61,7 @@ def Pereira2018_243sentences_ds_max(samples=100):
     ))
 def Pereira2018_243sentences_ds_max_rand(samples=100,rand_id=1):
     return _Pereira2018ExperimentSamplerLinear(experiment='243sentences',
-                                               sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/ds_max_Ns_{samples}_rand_{rand_id}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-base-uncased_gpt2-xl_ctrl_Pereira2018_language_243sentences.pkl',
+                                               sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/ds_max_Ns_{samples}_rand_{rand_id}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-large-uncased-whole-word-masking_gpt2-xl_ctrl_Pereira2018_language_243sentences.pkl',
                                                ceiling_s3_kwargs=dict(
         version_id='CHl_9aFHIWVnPW_njePfy28yzggKuUPw',
         sha1='5e23de899883828f9c886aec304bc5aa0f58f66c',
@@ -77,7 +77,7 @@ def Pereira2018_243sentences_ds_max_rand(samples=100,rand_id=1):
 
 def Pereira2018_243sentences_ds_min(samples=100):
     return _Pereira2018ExperimentSamplerLinear(experiment='243sentences',
-                                               sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/2-ds_max_Ns_{samples}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-base-uncased_gpt2-xl_ctrl_Pereira2018_language_243sentences.pkl',
+                                               sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/2-ds_max_Ns_{samples}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-large-uncased-whole-word-masking_gpt2-xl_ctrl_Pereira2018_language_243sentences.pkl',
                                                ceiling_s3_kwargs=dict(
         version_id='CHl_9aFHIWVnPW_njePfy28yzggKuUPw',
         sha1='5e23de899883828f9c886aec304bc5aa0f58f66c',
@@ -93,7 +93,7 @@ def Pereira2018_243sentences_ds_min(samples=100):
 
 def Pereira2018_243sentences_ds_min_rand(samples=100,rand_id=1):
     return _Pereira2018ExperimentSamplerLinear(experiment='243sentences',
-                                               sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/2-ds_max_Ns_{samples}_rand_{rand_id}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-base-uncased_gpt2-xl_ctrl_Pereira2018_language_243sentences.pkl',
+                                               sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/2-ds_max_Ns_{samples}_rand_{rand_id}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-large-uncased-whole-word-masking_gpt2-xl_ctrl_Pereira2018_language_243sentences.pkl',
                                                ceiling_s3_kwargs=dict(
         version_id='CHl_9aFHIWVnPW_njePfy28yzggKuUPw',
         sha1='5e23de899883828f9c886aec304bc5aa0f58f66c',
@@ -124,7 +124,7 @@ def Pereira2018_384sentences():
 
 def Pereira2018_384sentences_ds_max(samples=100):
     return _Pereira2018ExperimentSamplerLinear(experiment='384sentences',
-                                               sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/ds_max_Ns_{samples}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-base-uncased_gpt2-xl_ctrl_Pereira2018_language_384sentences.pkl',
+                                               sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/ds_max_Ns_{samples}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-large-uncased-whole-word-masking_gpt2-xl_ctrl_Pereira2018_language_384sentences.pkl',
                                                ceiling_s3_kwargs=dict(
         version_id='sjlnXr5wXUoGv6exoWu06C4kYI0KpZLk',
         sha1='fc895adc52fd79cea3040961d65d8f736a9d3e29',
@@ -141,7 +141,7 @@ def Pereira2018_384sentences_ds_max(samples=100):
 
 def Pereira2018_384sentences_ds_max_rand(samples=100,rand_id=1):
     return _Pereira2018ExperimentSamplerLinear(experiment='384sentences',
-                                               sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/ds_max_Ns_{samples}_rand_{rand_id}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-base-uncased_gpt2-xl_ctrl_Pereira2018_language_384sentences.pkl',
+                                               sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/ds_max_Ns_{samples}_rand_{rand_id}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-large-uncased-whole-word-masking_gpt2-xl_ctrl_Pereira2018_language_384sentences.pkl',
                                                ceiling_s3_kwargs=dict(
         version_id='sjlnXr5wXUoGv6exoWu06C4kYI0KpZLk',
         sha1='fc895adc52fd79cea3040961d65d8f736a9d3e29',
@@ -169,7 +169,7 @@ def Pereira2018_384sentences_ds_min(samples=100):
             )
         )
     ),
-    sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/2-ds_max_Ns_{samples}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-base-uncased_gpt2-xl_ctrl_Pereira2018_language_384sentences.pkl')
+    sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/2-ds_max_Ns_{samples}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-large-uncased-whole-word-masking_gpt2-xl_ctrl_Pereira2018_language_384sentences.pkl')
 
 def Pereira2018_384sentences_ds_min_rand(samples=100,rand_id=1):
     return _Pereira2018ExperimentSamplerLinear(experiment='384sentences', ceiling_s3_kwargs=dict(
@@ -184,7 +184,7 @@ def Pereira2018_384sentences_ds_min_rand(samples=100,rand_id=1):
             )
         )
     ),
-    sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/2-ds_max_Ns_{samples}_rand_{rand_id}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-base-uncased_gpt2-xl_ctrl_Pereira2018_language_384sentences.pkl')
+    sampler=f'/om2/user/ehoseini/MyData/brain-score-language/output/2-ds_max_Ns_{samples}_rand_{rand_id}_corrcoef_roberta-base_xlm-mlm-en-2048_xlnet-large-cased_albert-xxlarge-v2_bert-large-uncased-whole-word-masking_gpt2-xl_ctrl_Pereira2018_language_384sentences.pkl')
 
 
 class _Pereira2018ExperimentLinear(BenchmarkBase):
