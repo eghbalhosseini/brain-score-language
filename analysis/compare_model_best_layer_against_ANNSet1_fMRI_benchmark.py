@@ -12,7 +12,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 
 if __name__ == '__main__':
-    ANNSet1 = load_benchmark('ANNSet1_fMRI.best.language_top_90_V2-linear')
+    ANNSet1 = load_benchmark('ANNSet1_fMRI.train.language_top_90-linear')
     models = ['roberta-base','xlm-mlm-en-2048','xlnet-large-cased','albert-xxlarge-v2','bert-base-uncased','gpt2-xl','ctrl']
     for model in models:
         candidate = load_model(f'{model}')

@@ -109,7 +109,7 @@ class _ANNSet1_fMRI_ExperimentLinear(BenchmarkBase):
         self.data = self._load_data(atlas)
         self.metric = load_metric('linear_pearsonr')
         identifier = f'ANNSet1_fMRI.{atlas}-linear'
-        ceiling = None if not ceiling_s3_kwargs else self._load_ceiling(identifier=identifier, **ceiling_s3_kwargs)
+        ceiling = None #if not ceiling_s3_kwargs else self._load_ceiling(identifier=identifier, **ceiling_s3_kwargs)
         super(_ANNSet1_fMRI_ExperimentLinear, self).__init__(
             identifier=identifier,
             version=1,
