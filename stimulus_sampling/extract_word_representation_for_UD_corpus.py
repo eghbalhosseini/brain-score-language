@@ -13,7 +13,7 @@ import argparse
 import seaborn as sns
 from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error, r2_score
-UD_PARENT='/om/user/ehoseini/MyData/Universal Dependencies 2.6/'
+UD_PARENT='/om/weka/evlab/ehoseini//MyData/Universal Dependencies 2.6/'
 SAVE_DIR='/om2/user/ehoseini/MyData/brain-score-language/dataset'
 OUTPUT_DIR='/om2/user/ehoseini/MyData/brain-score-language/output'
 device =torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

@@ -45,7 +45,7 @@ def upload_ANNSet1_fMRI(atlas):
 
 
 def load_ANNSet1_fMRI_full(threshold=80):
-    data_dir=Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/ANNsent_trainset_subs_8_thresh-{threshold}.pkl')
+    data_dir=Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/ANNsent_trainset_subs_8_thresh-{threshold}.pkl')
     data=pd.read_pickle(data_dir.__str__())
     atlas_data=dict()
     name_pair={'language':'network_lang','auditory':'network_aud','visual':'network_vis'}
@@ -84,7 +84,7 @@ def load_ANNSet1_fMRI_full(threshold=80):
     return atlas_data
 
 def load_ANNSet1_fMRI_extended(threshold=80):
-    data_dir=Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/ANNsent_all_subs_16_thresh-{threshold}_analyzed.pkl')
+    data_dir=Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/ANNsent_all_subs_16_thresh-{threshold}_analyzed.pkl')
     data=pd.read_pickle(data_dir.__str__())
     atlas_data=dict()
     name_pair={'language':'network_lang','auditory':'network_aud','visual':'network_vis'}
@@ -143,7 +143,7 @@ def load_ANNSet1_fMRI_extended(threshold=80):
 
 
 def load_ANNSet1_fMRI_for_RSA_extended(threshold=80):
-    data_dir=Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/ANNsent_all_subs_16_thresh-{threshold}_analyzed.pkl')
+    data_dir=Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/ANNsent_all_subs_16_thresh-{threshold}_analyzed.pkl')
     data=pd.read_pickle(data_dir.__str__())
     atlas_data=dict()
     name_pair={'language':'network_lang','auditory':'network_aud','visual':'network_vis'}

@@ -1,9 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import scipy.stats
 
 from brainscore_language import load_benchmark,load_model
 from pathlib import Path
+import scipy
 import pickle
 from tqdm import tqdm
 
@@ -17,8 +19,8 @@ if __name__ == '__main__':
 
 
     # for all models compute benchmarks:
-    models = ['roberta-base', 'xlm-mlm-en-2048', 'xlnet-large-cased', 'albert-xxlarge-v2', 'bert-base-uncased',
-              'gpt2-xl', 'ctrl']
+    models = ['roberta-base',  'xlnet-large-cased', 'bert-large-uncased-whole-word-masking','xlm-mlm-en-2048',
+              'gpt2-xl','albert-xxlarge-v2', 'ctrl']
     model_scores_pereira_384_ds_max=[]
     model_scores_pereira_384_ds_max_rand=[]
     model_scores_pereira_384_ds_min=[]
@@ -28,27 +30,27 @@ if __name__ == '__main__':
     model_scores_pereira_243_ds_max_rand=[]
     model_scores_pereira_243_ds_min=[]
     model_scores_pereira_243_ds_min_rand=[]
-    kk_val=[150,200]
+    kk_val=[100,150]
     kk=0
     for model in models:
-        model_scores_pereira_384_ds_max.append(pd.read_pickle(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score384_ds_max.pkl')[kk])
-        model_scores_pereira_384_ds_max_rand.append(pd.read_pickle(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score384_ds_max_rand.pkl')[kk])
-        model_scores_pereira_384_ds_min.append(pd.read_pickle(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score384_ds_min.pkl')[kk])
+        model_scores_pereira_384_ds_max.append(pd.read_pickle(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/{model}_score384_ds_max.pkl')[kk])
+        model_scores_pereira_384_ds_max_rand.append(pd.read_pickle(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/{model}_score384_ds_max_rand.pkl')[kk])
+        model_scores_pereira_384_ds_min.append(pd.read_pickle(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/{model}_score384_ds_min.pkl')[kk])
         model_scores_pereira_384_ds_min_rand.append(
-            pd.read_pickle(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score384_ds_min_rand.pkl')[kk])
+            pd.read_pickle(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/{model}_score384_ds_min_rand.pkl')[kk])
 
         model_scores_pereira_243_ds_max.append(
-            pd.read_pickle(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score243_ds_max.pkl')[kk])
+            pd.read_pickle(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/{model}_score243_ds_max.pkl')[kk])
         model_scores_pereira_243_ds_max_rand.append(
-            pd.read_pickle(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score243_ds_max_rand.pkl')[kk])
+            pd.read_pickle(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/{model}_score243_ds_max_rand.pkl')[kk])
         model_scores_pereira_243_ds_min.append(
-            pd.read_pickle(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score243_ds_min.pkl')[kk])
+            pd.read_pickle(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/{model}_score243_ds_min.pkl')[kk])
         model_scores_pereira_243_ds_min_rand.append(
-            pd.read_pickle(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score243_ds_min_rand.pkl')[kk])
+            pd.read_pickle(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/{model}_score243_ds_min_rand.pkl')[kk])
 
     # load model
 # 1.
-    model_Pereira=np.stack([model_scores_pereira_243_ds_max_rand,model_scores_pereira_384_ds_max]).squeeze().mean(axis=0)
+    model_Pereira=np.stack([model_scores_pereira_243_ds_max_rand,model_scores_pereira_384_ds_max_rand]).squeeze().mean(axis=0)
     model_Pereira_ds_min = np.stack([model_scores_pereira_243_ds_min, model_scores_pereira_384_ds_min]).squeeze().mean(axis=0)
     model_Pereira_ds_max =np.stack([model_scores_pereira_243_ds_max, model_scores_pereira_384_ds_max]).squeeze().mean(axis=0)
     #model_Pereira_rand=[np.mean([x.values for x in y]) for y in model_scores_pereira_384_ds_max]
@@ -56,6 +58,23 @@ if __name__ == '__main__':
     #model_Pereira_ds_max = [np.mean([x.values for x in y]) for y in model_scores_pereira_ds_max]
 
 
+    # find the ceiling values
+
+    [x.raw.values/x.values for x in model_scores_pereira_384_ds_min]
+
+
+    a=np.stack([x.raw.raw.groupby('subject').mean('split').groupby('subject').median('neuroid').values for x in model_scores_pereira_243_ds_min]).transpose()
+    b=np.stack([x.raw.raw.groupby('subject').mean('split').groupby('subject').median('neuroid').values for x in model_scores_pereira_384_ds_min]).transpose()
+    ds_min_error=scipy.stats.median_abs_deviation(np.concatenate((a,b),axis=0))
+    # do the same for ds max
+    a=np.stack([x.raw.raw.groupby('subject').mean('split').groupby('subject').median('neuroid').values for x in model_scores_pereira_243_ds_max]).transpose()
+    b=np.stack([x.raw.raw.groupby('subject').mean('split').groupby('subject').median('neuroid').values for x in model_scores_pereira_384_ds_max]).transpose()
+    ds_max_error=scipy.stats.median_abs_deviation(np.concatenate((a,b),axis=0))
+    # do the same for ds max rand
+    a=np.stack([x.raw.raw.groupby('subject').mean('split').groupby('subject').median('neuroid').values for x in model_scores_pereira_243_ds_max_rand]).transpose()
+    b=np.stack([x.raw.raw.groupby('subject').mean('split').groupby('subject').median('neuroid').values for x in model_scores_pereira_384_ds_max_rand]).transpose()
+    ds_max_rand_error=scipy.stats.median_abs_deviation(np.concatenate((a,b),axis=0))
+    # do the same for ds min rand
 
 
     x = np.arange(len(models))  # the label locations
@@ -64,9 +83,13 @@ if __name__ == '__main__':
     fig = plt.figure(figsize=(11, 8))
     ax = plt.axes((.1, .4, .35, .35))
     rects1 = ax.bar(x , np.stack(model_Pereira), width, color=np.divide((55, 76, 128), 256),label='Pereira')
+    ax.errorbar(x, np.stack(model_Pereira).squeeze(),yerr=np.stack(ds_max_rand_error).squeeze(), linestyle='', color='k')
     rects2 = ax.bar(x - width , np.stack(model_Pereira_ds_min).squeeze(), width, label='Pereira_Ds_min (N=100)',color=np.divide((188, 80, 144), 255))
+    ax.errorbar(x - width, np.stack(model_Pereira_ds_min).squeeze(),yerr=np.stack(ds_min_error).squeeze(), linestyle='', color='k')
+
     rects3 = ax.bar(x + width , np.stack(model_Pereira_ds_max).squeeze(), width, label='Peireira_Ds_max (N=100)',
                     color=np.divide((255, 128, 0), 255))
+    ax.errorbar(x + width, np.stack(model_Pereira_ds_max).squeeze(),yerr=np.stack(ds_max_error).squeeze(), linestyle='', color='k')
     # ax.errorbar(x + width / 2, np.stack(model_ANNSet1).squeeze(),
     #             yerr=np.stack(model_ANNSet1_err).squeeze(), linestyle='',
     #             color='k')
@@ -74,7 +97,8 @@ if __name__ == '__main__':
     # Add some text for labels, title and custom x-axis tick labels, etc.
     ax.set_ylabel('Pearson correlation')
     ax.set_xticks(x, models)
-    ax.set_ylim((-.1, 1.1))
+    ax.set_xlim((-.5, 6.5))
+    ax.set_ylim((-.15, 1.15))
     ax.legend()
     ax.legend(bbox_to_anchor=(1.5, .8), frameon=True)
     #ax.bar_label(rects1, padding=3)
@@ -87,10 +111,11 @@ if __name__ == '__main__':
     #fig.tight_layout()
 
     fig.show()
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/Pereira_ds_min_ds_max_comp_{kk_val[kk]}.png')
+    analysis_dir='/rdma/vast-rdma/vast/evlab/ehoseini/MyData/brain-score-language/analysis/'
+    save_loc = Path(f'{analysis_dir}/Pereira_ds_min_ds_max_comp_{kk_val[kk]}.png')
     fig.savefig(save_loc.__str__(), dpi=250,format='png',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
 
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/Pereira_ds_min_ds_max_comp{kk_val[kk]}.eps')
+    save_loc = Path(f'{analysis_dir}/Pereira_ds_min_ds_max_comp{kk_val[kk]}.eps')
     fig.savefig(save_loc.__str__(), format='eps',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
 
 
@@ -146,11 +171,11 @@ if __name__ == '__main__':
 
     fig.show()
 
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_comp_{kk_val[kk]}.png')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_comp_{kk_val[kk]}.png')
     fig.savefig(save_loc.__str__(), dpi=250, format='png', metadata=None, bbox_inches=None, pad_inches=0.1,
                 facecolor='auto', edgecolor='auto', backend=None)
 
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_comp_{kk_val[kk]}.eps')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_comp_{kk_val[kk]}.eps')
     fig.savefig(save_loc.__str__(), format='eps', metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto',
                 edgecolor='auto', backend=None)
 
@@ -208,25 +233,25 @@ if __name__ == '__main__':
 
     fig.show()
 
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_comp_{kk_val[kk]}.png')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_comp_{kk_val[kk]}.png')
     fig.savefig(save_loc.__str__(), dpi=250, format='png', metadata=None, bbox_inches=None, pad_inches=0.1,
                 facecolor='auto', edgecolor='auto', backend=None)
 
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_comp_{kk_val[kk]}.eps')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_comp_{kk_val[kk]}.eps')
     fig.savefig(save_loc.__str__(), format='eps', metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto',
                 edgecolor='auto', backend=None)
 
 
     # plot sampler resutls
 
-    Pereria384_ds_max = load_benchmark(f'Pereira2018.384sentences.ds.max.150-linear')
-    Pereria384_ds_min = load_benchmark(f'Pereira2018.384sentences.ds.min.150-linear')
-    Pereria384_ds_max_rand =load_benchmark(f'Pereira2018.384sentences.ds.max.150.rand.0-linear')
+    Pereria384_ds_max = load_benchmark(f'Pereira2018.384sentences.ds.max.100-linear')
+    Pereria384_ds_min = load_benchmark(f'Pereira2018.384sentences.ds.min.100-linear')
+    Pereria384_ds_max_rand =load_benchmark(f'Pereira2018.384sentences.ds.max.100.rand.0-linear')
 
 
-    Pereria243_ds_max = load_benchmark(f'Pereira2018.243sentences.ds.max.150-linear')
-    Pereria243_ds_max_rand =load_benchmark(f'Pereira2018.243sentences.ds.max.150.rand.0-linear')
-    Pereria243_ds_min = load_benchmark(f'Pereira2018.243sentences.ds.min.150-linear')
+    Pereria243_ds_max = load_benchmark(f'Pereira2018.243sentences.ds.max.100-linear')
+    Pereria243_ds_max_rand =load_benchmark(f'Pereira2018.243sentences.ds.max.100.rand.0-linear')
+    Pereria243_ds_min = load_benchmark(f'Pereira2018.243sentences.ds.min.100-linear')
     Pereria243_ds_min_rand = [load_benchmark(f'Pereira2018.243sentences.ds.min.{x}.rand.0-linear') for x in [150, 200]]
 
     xx=pd.read_pickle(Pereria384_ds_max.sampler)
@@ -307,11 +332,11 @@ if __name__ == '__main__':
 
     fig.show()
 
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_optim_res.png')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_optim_res.png')
     fig.savefig(save_loc.__str__(), dpi=250, format='png', metadata=None, bbox_inches=None, pad_inches=0.1,
                 facecolor='auto', edgecolor='auto', backend=None)
 
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_optim_res.eps')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/Pereira_243_ds_min_ds_max_optim_res.eps')
     fig.savefig(save_loc.__str__(), format='eps', metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto',
                 edgecolor='auto', backend=None)
 

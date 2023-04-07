@@ -1,26 +1,37 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from brainscore_language import load_benchmark,load_model
+from brainscore_language import load_benchmark,load_model, ArtificialSubject
 from pathlib import Path
 import pickle
 import numpy as np
 import pandas as pd
 import re
+import xarray as xr
+from tqdm import tqdm
 
 if __name__ == '__main__':
     #ANNSet1 = load_benchmark('ANNSet1_fMRI.train.language_top_90-linear')
-    ann_benchmark_set = ['ANNSet1_fMRI.train.language_top_90-linear',
-                         'ANNSet1_fMRI.train.auditory-linear',
-                         'ANNSet1_fMRI.train.visual-linear',
-                         'ANNSet1_fMRI.best.language_top_90_V2-linear',
-                         'ANNSet1_fMRI_WOPeriod.train.language_top_90-linear']
+    ann_benchmark_set = ['ANNSet1_fMRI.train.language_top_90-linear']
 
-    #models = ['roberta-base','xlm-mlm-en-2048','xlnet-large-cased','albert-xxlarge-v2','bert-base-uncased','gpt2-xl','ctrl']
-    models = ['distilgpt2-layerwise', 'gpt2-layerwise', 'gpt2-medium-layerwise', 'gpt2-large-layerwise']
+    models = ['roberta-base','xlm-mlm-en-2048','xlnet-large-cased','albert-xxlarge-v2','bert-base-uncased','gpt2-xl','ctrl']
+
+    model= models[6]
     for ann_bench in ann_benchmark_set:
         ANNSet1=load_benchmark(ann_bench)
         for model in models:
             candidate = load_model(f'{model}')
+            candidate.start_behavioral_task(task=ArtificialSubject.Task.next_word)
+            stimuli = ANNSet1.data['stimulus']
+            next_word_predictions=[]
+            for stim_id, stim in tqdm(stimuli.groupby('stimulus_id'), desc='digest individual sentences'):
+                True
+                stim_split=stim.values[0].split(' ')
+                next_word_prediction = candidate.digest_text(stim_split)['behavior']
+                next_word_predictions.append(next_word_prediction)
+            next_word_predictions = xr.concat(next_word_predictions, dim='presentation')
+
+            text = []
+
             benchmark_id=ANNSet1.identifier.replace('.','_')
             'score_distilgpt2-layerwise_ANNSet1_fMRI.train.auditory-linear.pkl'
             save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/score_{candidate.identifier}_{ANNSet1.identifier}.pkl')

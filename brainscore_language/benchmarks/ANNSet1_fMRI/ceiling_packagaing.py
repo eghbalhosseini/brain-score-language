@@ -31,7 +31,7 @@ def upload_ceiling(atlas):
     ceiler = ExtrapolationCeiling()
     ceiling = ceiler(benchmark.data, metric=benchmark.metric)
     _logger.info(f"Uploading ceiling {ceiling} and saving them locally")
-    ceiling_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/ceiling_{benchmark.identifier}.pkl')
+    ceiling_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/ceiling_{benchmark.identifier}.pkl')
     with open(ceiling_dir.__str__(), 'wb') as f:
         pickle.dump(ceiling,f)
     # Note that because we cannot serialize complex objects to netCDF, attributes like 'raw' and 'bootstrapped_params'
@@ -168,9 +168,9 @@ class ExtrapolationCeiling:
         ax0.axhline(y=0, color='k', linewidth=2)
         ax0.set_ylim([-.1,.6])
 
-        fig.savefig(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/{assembly.identifier}_regression_ceilings.png',
+        fig.savefig(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/{assembly.identifier}_regression_ceilings.png',
                     facecolor=(1, 1, 1), edgecolor='none')
-        fig.savefig(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/{assembly.identifier}_regression_ceilings.pdf',
+        fig.savefig(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/{assembly.identifier}_regression_ceilings.pdf',
                    facecolor=(1, 1, 1), edgecolor='none')
                    
         END CODE 
@@ -366,7 +366,7 @@ if __name__ == '__main__':
     # scores=ceiler.collect(identifier=benchmark.data.identifier,assembly=benchmark.data,metric=benchmark.metric)
     # ceilings=ceiler.extrapolate(identifier=benchmark.data.identifier, ceilings=scores)
 
-    # ceiling_dir=Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/ceiling_{benchmark.identifier}.pkl')
+    # ceiling_dir=Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/ceiling_{benchmark.identifier}.pkl')
     # with open(ceiling_dir.__str__(),'wb') as f:
     #    pickle.dump(ceilings,f)
     #     _logger.info(f"Uploading ceiling {ceiling}")

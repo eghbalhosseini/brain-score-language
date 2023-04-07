@@ -28,7 +28,7 @@ if __name__ == '__main__':
         benchmark=load_benchmark(ann_benchmark)
         score=benchmark(candidate)
         bench_id=benchmark.identifier.replace('.','-')
-        save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/score_{candidate.identifier}_{benchmark.identifier}.pkl')
+        save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/score_{candidate.identifier}_{benchmark.identifier}.pkl')
         with open(save_dir.__str__(), 'wb') as f:
             pickle.dump(score, f)
 

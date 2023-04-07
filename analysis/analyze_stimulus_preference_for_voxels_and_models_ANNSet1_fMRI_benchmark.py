@@ -73,7 +73,7 @@ if __name__ == '__main__':
             vox_dtw_dist[idx,idy]=d
 
     benchmark_id=ANNSet1.data.identifier.replace('.','-')
-    save_path=Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/vox_preference_dtw_fast_{benchmark_id}_scores.pkl')
+    save_path=Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/vox_preference_dtw_fast_{benchmark_id}_scores.pkl')
     if not save_path.exists():
         with open(save_path.__str__(), 'wb') as f:
                 pickle.dump(vox_dtw_dist, f)
@@ -156,7 +156,7 @@ if __name__ == '__main__':
 #         ax.set_ylabel('variance explained')
 #
 #         save_loc = Path(
-#             f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/results_{candidate.identifier}_{benchmark_id}_score_vs_tvals.png')
+#             f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/results_{candidate.identifier}_{benchmark_id}_score_vs_tvals.png')
 #         fig.savefig(save_loc.__str__(), dpi=250, format='png', metadata=None, bbox_inches=None, pad_inches=0.1,
 #                     facecolor='auto', edgecolor='auto', backend=None)
 #
@@ -200,7 +200,7 @@ if __name__ == '__main__':
 #         ax.set_xlabel('Voxel ID, sorted by langloc')
 #         ax.set_ylabel('Pearson correlation (vox_score)')
 #         #fig.show()
-#         save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/results_{candidate.identifier}_{benchmark_id}_aggregate_score_vs_tvals.png')
+#         save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/results_{candidate.identifier}_{benchmark_id}_aggregate_score_vs_tvals.png')
 #         fig.savefig(save_loc.__str__(), dpi=250,format='png',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
-#         save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/results_{candidate.identifier}_{benchmark_id}_aggregate_score_vs_tvals.eps')
+#         save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/results_{candidate.identifier}_{benchmark_id}_aggregate_score_vs_tvals.eps')
 #         fig.savefig(save_loc.__str__(),format='eps',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)

@@ -55,8 +55,8 @@ if __name__ == '__main__':
     ax.set_xticklabels(labels, rotation=90, fontsize=12)
     ax.set_ylabel('Pearson corr')
     fig.show()
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/results_models_{benchmark_id}_score.png')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/results_models_{benchmark_id}_score.png')
     fig.savefig(save_loc.__str__(), dpi=250,format='png',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
 
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/results_models_{benchmark_id}_score.eps')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/results_models_{benchmark_id}_score.eps')
     fig.savefig(save_loc.__str__(),format='eps',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)

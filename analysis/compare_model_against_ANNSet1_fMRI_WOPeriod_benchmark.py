@@ -54,17 +54,17 @@ if __name__ == '__main__':
 
     fig.show()
     save_loc = Path(
-        f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/ANNSet1_WOperiod_performance_all_models.png')
+        f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/ANNSet1_WOperiod_performance_all_models.png')
     fig.savefig(save_loc.__str__(), dpi=250, format='png', metadata=None, bbox_inches=None, pad_inches=0.1,
                 facecolor='auto', edgecolor='auto', backend=None)
 
     save_loc = Path(
-        f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/ANNSet1_WOperiod_performance_all_models.eps')
+        f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/ANNSet1_WOperiod_performance_all_models.eps')
     fig.savefig(save_loc.__str__(), dpi=250, format='png', metadata=None, bbox_inches=None, pad_inches=0.1,
                 facecolor='auto', edgecolor='auto', backend=None)
 
         #
-        # save_path=Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{candidate.identifier}_{benchmark_id}_scores.pkl')
+        # save_path=Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/{candidate.identifier}_{benchmark_id}_scores.pkl')
         # if not save_path.exists():
         #     model_score = ANNSet1(candidate)
         #     with open(save_path.__str__(), 'wb') as f:
@@ -100,8 +100,8 @@ if __name__ == '__main__':
         # ax.set_xticklabels(layer_name, rotation=90, fontsize=8)
         # ax.set_ylabel('Pearson corr')
         # #fig.show()
-        # save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/results_{candidate.identifier}_{benchmark_id}_score.png')
+        # save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/results_{candidate.identifier}_{benchmark_id}_score.png')
         # fig.savefig(save_loc.__str__(), dpi=250,format='png',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
         #
-        # save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/results_{candidate.identifier}_{benchmark_id}_score.eps')
+        # save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/results_{candidate.identifier}_{benchmark_id}_score.eps')
         # fig.savefig(save_loc.__str__(),format='eps',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)

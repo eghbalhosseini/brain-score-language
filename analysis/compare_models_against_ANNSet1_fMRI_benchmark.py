@@ -19,16 +19,16 @@ roberta_score=ANNSet1(candidate)
 roberta_score_p234=Pereira234(candidate)
 roberta_score_p384=Pereira384(candidate)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/roberta_score_ANN.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/roberta_score_ANN.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(roberta_score, f)
 
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/roberta_score_p234.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/roberta_score_p234.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(roberta_score_p234, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/roberta_score_p384.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/roberta_score_p384.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(roberta_score_p384, f)
 
@@ -39,15 +39,15 @@ xlm_score=ANNSet1(candidate)
 xlm_score_p234=Pereira234(candidate)
 xlm_score_p384=Pereira384(candidate)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/xlm_score_ANN.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/xlm_score_ANN.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(xlm_score, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/xlm_score_p234.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/xlm_score_p234.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(xlm_score_p234, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/xlm_score_p384.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/xlm_score_p384.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(xlm_score_p384, f)
 
@@ -57,15 +57,15 @@ xlnet_score=ANNSet1(candidate)
 xlnet_score_p234=Pereira234(candidate)
 xlnet_score_p384=Pereira384(candidate)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/xlnet_score_ANN.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/xlnet_score_ANN.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(xlnet_score, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/xlnet_score_p234.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/xlnet_score_p234.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(xlnet_score_p234, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/xlnet_score_p384.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/xlnet_score_p384.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(xlnet_score_p384, f)
 
@@ -75,15 +75,15 @@ albert_score=ANNSet1(candidate)
 albert_score_p234=Pereira234(candidate)
 albert_score_p384=Pereira384(candidate)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/albert_score_ANN.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/albert_score_ANN.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(albert_score, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/albert_score_p234.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/albert_score_p234.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(albert_score_p234, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/albert_score_p384.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/albert_score_p384.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(albert_score_p384, f)
 
@@ -93,15 +93,15 @@ bert_score=ANNSet1(candidate)
 bert_score_p234=Pereira234(candidate)
 bert_score_p384=Pereira384(candidate)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/bert_score_ANN.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/bert_score_ANN.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(bert_score, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/bert_score_p234.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/bert_score_p234.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(bert_score_p234, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/bert_score_p384.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/bert_score_p384.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(bert_score_p384, f)
 
@@ -111,15 +111,15 @@ gpt2_score=ANNSet1(candidate)
 gpt2_score_p234=Pereira234(candidate)
 gpt2_score_p384=Pereira384(candidate)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/gpt2_score_ANN.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/gpt2_score_ANN.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(gpt2_score, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/gpt2_score_p234.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/gpt2_score_p234.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(gpt2_score_p234, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/gpt2_score_p384.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/gpt2_score_p384.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(gpt2_score_p384, f)
 
@@ -129,15 +129,15 @@ ctrl_score=ANNSet1(candidate)
 ctrl_score_p234=Pereira234(candidate)
 ctrl_score_p384=Pereira384(candidate)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/ctrl_score_ANN.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/ctrl_score_ANN.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(ctrl_score, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/ctrl_score_p234.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/ctrl_score_p234.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(ctrl_score_p234, f)
 
-save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/ctrl_score_p384.pkl')
+save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/ctrl_score_p384.pkl')
 with open(save_dir.__str__(), 'wb') as f:
     pickle.dump(ctrl_score_p384, f)
 
@@ -185,9 +185,9 @@ def plot_scores_against_repetition_ratio(model_score,save_name):
     plt.tight_layout()
     ax.set_xlabel('repetition correlatione')
     ax.set_ylabel('variance explained')
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/{save_name}_vs_rep_corr.png')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/{save_name}_vs_rep_corr.png')
     fig.savefig(save_loc.__str__(), dpi=250,format='png',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/{save_name}_vs_rep_corr.eps')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/{save_name}_vs_rep_corr.eps')
     fig.savefig(save_loc.__str__(), format='eps',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
 
     fig = plt.figure(figsize=(11, 8))
@@ -213,9 +213,9 @@ def plot_scores_against_repetition_ratio(model_score,save_name):
     plt.tight_layout()
     ax.set_xlabel('repetition correlatione')
     ax.set_ylabel('variance explained')
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/{save_name}_vs_rep_corr_all_subs.png')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/{save_name}_vs_rep_corr_all_subs.png')
     fig.savefig(save_loc.__str__(), dpi=250,format='png',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/{save_name}_vs_rep_corr_subs.eps')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/{save_name}_vs_rep_corr_subs.eps')
     fig.savefig(save_loc.__str__(), format='eps',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
 
 if __name__ == '__main__':
@@ -223,14 +223,14 @@ if __name__ == '__main__':
     model_pereira_scores=[]
     model_ANN_score=[]
     for model in models:
-        save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score_p234.pkl')
+        save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/{model}_score_p234.pkl')
         assert save_dir.exists()
         a=pd.read_pickle(save_dir.__str__())
-        save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score_p384.pkl')
+        save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/{model}_score_p384.pkl')
         assert save_dir.exists()
         b=pd.read_pickle(save_dir.__str__())
         model_pereira_scores.append([a,b])
-        save_dir = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/{model}_score_ANN.pkl')
+        save_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/{model}_score_ANN.pkl')
         assert save_dir.exists()
         c=pd.read_pickle(save_dir)
         model_ANN_score.append(c)
@@ -240,7 +240,7 @@ if __name__ == '__main__':
     ANNSet1 = load_benchmark('ANNSet1_fMRI.train.language_top_90-linear')
     Pereira234 = load_benchmark('Pereira2018.243sentences-linear')
     Pereira384 = load_benchmark('Pereira2018.384sentences-linear')
-    model_score_pereira=pd.read_pickle('/om/user/ehoseini/MyData/fmri_DNN/outputs/model_scores_pereira.pkl')
+    model_score_pereira=pd.read_pickle('/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/model_scores_pereira.pkl')
     model_Pereira = [np.mean([x.values for x in y]) for y in model_score_pereira]
     # plot_scores_against_repetition_ratio(roberta_score, 'roberta-base')
     # plot_scores_against_repetition_ratio(xlm_score,'xlm-mlm-en-2048')
@@ -289,8 +289,8 @@ if __name__ == '__main__':
     #fig.tight_layout()
 
     fig.show()
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/ANNSet1_vs_Pereira_performance_all_models.png')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/ANNSet1_vs_Pereira_performance_all_models.png')
     fig.savefig(save_loc.__str__(), dpi=250,format='png',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
 
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/ANNSet1_vs_Pereira_performance_all_models.eps')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/ANNSet1_vs_Pereira_performance_all_models.eps')
     fig.savefig(save_loc.__str__(), format='eps',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)

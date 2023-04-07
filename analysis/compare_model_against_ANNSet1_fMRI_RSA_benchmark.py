@@ -11,7 +11,7 @@ if __name__ == '__main__':
     #ANNSet1_RSA=_ANNSet1_fMRI_ExperimentRSA(atlas='train.language_top_90',ceiling_s3_kwargs=None)
     ANNSet1_RSA = load_benchmark('ANNSet1_fMRI.train.language_top_90-rsa')
     benchmark_id = ANNSet1_RSA.identifier.replace('.', '_')
-    models = ['roberta-base','xlm-mlm-en-2048','xlnet-large-cased','albert-xxlarge-v2','bert-base-uncased','gpt2-xl','ctrl']
+    models = ['roberta-base','xlm-mlm-en-2048','xlnet-large-cased','albert-xxlarge-v2','bert-large-uncased','gpt2-xl','ctrl']
     model_scores=[]
     for model in models:
         candidate = load_model(f'{model}')
@@ -53,8 +53,8 @@ if __name__ == '__main__':
     ax.set_xticklabels(labels, rotation=90, fontsize=12)
     ax.set_ylabel('Pearson corr')
     fig.show()
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/results_models_{benchmark_id}_score.png')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/results_models_{benchmark_id}_score.png')
     fig.savefig(save_loc.__str__(), dpi=250,format='png',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
 
-    save_loc = Path(f'/om/user/ehoseini/MyData/fmri_DNN/outputs/plots/results_models_{benchmark_id}_score.eps')
+    save_loc = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/results_models_{benchmark_id}_score.eps')
     fig.savefig(save_loc.__str__(),format='eps',metadata=None, bbox_inches=None, pad_inches=0.1, facecolor='auto', edgecolor='auto', backend=None)
