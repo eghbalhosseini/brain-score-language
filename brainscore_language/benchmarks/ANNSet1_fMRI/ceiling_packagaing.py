@@ -29,6 +29,7 @@ def upload_ceiling(atlas):
     benchmark = load_benchmark(f'ANNSet1_fMRI.{atlas}-linear')
 
     ceiler = ExtrapolationCeiling()
+    d=ceiler.collect(benchmark.identifier, benchmark.data, benchmark.metric)
     ceiling = ceiler(benchmark.data, metric=benchmark.metric)
     _logger.info(f"Uploading ceiling {ceiling} and saving them locally")
     ceiling_dir = Path(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/ceiling_{benchmark.identifier}.pkl')
@@ -109,7 +110,7 @@ class ExtrapolationCeiling:
         self.subject_column = subject_column
         self.extrapolation_dimension = extrapolation_dimension
         self.num_bootstraps = num_bootstraps
-        self.num_subsamples = 10
+        self.num_subsamples = 20
         self.holdout_ceiling = HoldoutSubjectCeiling(subject_column=subject_column)
         self._rng = RandomState(0)
 
@@ -167,7 +168,7 @@ class ExtrapolationCeiling:
         ax0.set_ylabel("var explained, left out subject")
         ax0.axhline(y=0, color='k', linewidth=2)
         ax0.set_ylim([-.1,.6])
-
+        fig.show()
         fig.savefig(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/{assembly.identifier}_regression_ceilings.png',
                     facecolor=(1, 1, 1), edgecolor='none')
         fig.savefig(f'/om/weka/evlab/ehoseini//MyData/fmri_DNN/outputs/plots/{assembly.identifier}_regression_ceilings.pdf',
