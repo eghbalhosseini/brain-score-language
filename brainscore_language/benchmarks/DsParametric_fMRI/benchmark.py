@@ -43,32 +43,21 @@ class _DsParametric_fMRI_ExperimentLinear(BenchmarkBase):
         data = data[data['stim_group'] == self.stimulus_set]
         data.attrs['identifier'] = f'DsParametric_fMRI.{self.stimulus_set}.{atlas}'
         return data
-    def __call__(self, candidate: ArtificialSubject,stim_set:str) -> Score:
+    def __call__(self, candidate: ArtificialSubject) -> Score:
         candidate.start_neural_recording(recording_target=ArtificialSubject.RecordingTarget.language_system,
                                          recording_type=ArtificialSubject.RecordingType.fMRI)
         stimuli = self.data['stimulus']
-
-        # select data with stim_set
-        predictions=[]
         # if the preditions are already computed, retrieve them
         prediction_path=Path(ACTIVATON_DIR,f'model={candidate.identifier}_stimuli=DsParametricfMRI_{self.stimulus_set}.pkl')
         if prediction_path.exists():
             with open(prediction_path, 'rb') as f:
                 predictions = pickle.load(f)
-
         else:
             # throw an error if the predictions are not computed
             raise ValueError('The predictions are not computed yet. Please run the analysis/run_model_against_DsParametric_fMRI_benchmarks.py')
-            # for stim_id, stim in tqdm(stimuli.groupby('stimulus_id'), desc='digest individual sentences'):
-            #     prediction = candidate.digest_text(str(stim.values))['neural']
-            #     prediction['stimulus_id'] = 'presentation', stim['stimulus_id'].values
-            #     predictions.append(prediction)
-            # predictions = xr.concat(predictions, dim='presentation')
-
         # get last word activations for predictions
         prediction_last_word=[]
         for idx, x in predictions.groupby('stim_name'):
-            True
             assert(x['word'][-1]==str(x['stimulus_sentence'][-1].values).split()[-1])
             prediction_last_word.append(x[-1:,:])
         prediction_last_word=xr.concat(prediction_last_word,dim='presentation')
@@ -77,7 +66,6 @@ class _DsParametric_fMRI_ExperimentLinear(BenchmarkBase):
         assert(np.all(prediction_last_word['stim_name'].values==self.data['stim_name'].values))
         raw_scores = []
         for layer_id, prediction_lw in prediction_last_word.groupby('layer'):
-            True
             raw_score = self.metric(prediction_lw, self.data)
             raw_scores.append(raw_score.raw.expand_dims(dim={"layer": [layer_id]}, axis=0))
         raw_scores = xr.concat(raw_scores, dim='layer')
