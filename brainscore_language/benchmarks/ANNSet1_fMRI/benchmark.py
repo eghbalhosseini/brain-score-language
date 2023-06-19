@@ -102,8 +102,6 @@ def ANNSet1_fMRI_visual():
         raw_kwargs=dict(version_id='2xVUF8d_8thWGrYM_4iNbVTKJHUDjuX6',
             sha1='9a02a96e242e1202b091958a7563352111dfa46b')))
 
-
-
 class _ANNSet1_fMRI_ExperimentLinear(BenchmarkBase):
     def __init__(self, atlas:str,ceiling_s3_kwargs: dict ):
         self.data = self._load_data(atlas)
