@@ -18,14 +18,21 @@ import pickle
 BIBTEX = """
 }"""
 
-def DsParametric_fMRI(atlas,ceiling,stimulus_set):
-    return _DsParametric_fMRI_ExperimentLinear(atlas=atlas,ceiling_s3_kwargs=ceiling,stimulus_set=stimulus_set)
+def DsParametric_fMRI_Linear(atlas,ceiling,stimulus_set):
+    return _DsParametric_fMRI_ExperimentLinear(atlas=atlas,ceiling_s3_kwargs=ceiling,stimulus_set=stimulus_set,metric_id='linear_pearsonr')
+
+
+def DsParametric_fMRI_Ridge(atlas,ceiling,stimulus_set):
+    return _DsParametric_fMRI_ExperimentRidgeRegression(atlas=atlas,ceiling_s3_kwargs=ceiling,stimulus_set=stimulus_set,metric_id='ridge_correlation')
+
+
 
 class _DsParametric_fMRI_ExperimentLinear(BenchmarkBase):
-    def __init__(self, atlas:str,stimulus_set:str,ceiling_s3_kwargs: dict ):
+    def __init__(self, atlas:str,stimulus_set:str,ceiling_s3_kwargs: dict,metric_id='linear_pearsonr' ):
         self.stimulus_set = stimulus_set
         self.data = self._load_data(atlas)
-        self.metric = load_metric('linear_pearsonr')
+        self.metric_id = metric_id
+        self.metric = load_metric(self.metric_id)
 
         identifier = f'DsParametric_fMRI.{self.stimulus_set}.{atlas}-linear'
         ceiling = None #if not ceiling_s3_kwargs else self._load_ceiling(identifier=identifier, **ceiling_s3_kwargs)
@@ -92,3 +99,14 @@ class _DsParametric_fMRI_ExperimentLinear(BenchmarkBase):
                                      "then median of subject scores"
         return score
 
+
+class _DsParametric_fMRI_ExperimentRidgeRegression(_DsParametric_fMRI_ExperimentLinear):
+    def __init__(self,atlas: str, stimulus_set: str, ceiling_s3_kwargs: dict, metric_id='ridge_correlation'):
+        self.data = self._load_data(atlas)
+        self.stimulus_set = stimulus_set
+        self.metric_id = metric_id
+        self.metric = load_metric(self.metric_id)
+        identifier = f'DsParametric_fMRI.{self.stimulus_set}.{atlas}-RidgeRegression'
+        ceiling = None
+        super(_DsParametric_fMRI_ExperimentRidgeRegression, self).__init__(
+            atlas=atlas,stimulus_set=stimulus_set,metric_id=metric_id, ceiling_s3_kwargs=ceiling_s3_kwargs)

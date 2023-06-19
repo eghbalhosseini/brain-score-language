@@ -7,6 +7,8 @@ from brainio.assemblies import NeuroidAssembly, array_is_element, DataAssembly
 from brainio.assemblies import walk_coords
 from brainscore_core.metrics import Score, Metric
 from brainscore_language.utils.transformations import CrossValidation
+from sklearn.linear_model import RidgeCV
+import brainscore_language.metrics.linear_predictivity.metric as bl_linear_metric
 
 
 class Defaults:
@@ -164,6 +166,15 @@ def linear_regression(xarray_kwargs=None):
     regression = XarrayRegression(regression, **xarray_kwargs)
     return regression
 
+def rgcv_linear_regression(xarray_kwargs=None):
+    regression = RidgeCV(
+            alphas=[1e-3, 0.01, 0.1, 1, 10, 100])
+    xarray_kwargs = xarray_kwargs or {}
+    regression = bl_linear_metric.XarrayRegression(regression, **xarray_kwargs)
+    return regression
+
+
+
 
 def pearsonr_correlation(xarray_kwargs=None):
     xarray_kwargs = xarray_kwargs or {}
@@ -174,3 +185,11 @@ def linear_pearsonr(*args, regression_kwargs=None, correlation_kwargs=None, **kw
     regression = linear_regression(regression_kwargs or {})
     correlation = pearsonr_correlation(correlation_kwargs or {})
     return CrossRegressedCorrelation(*args, regression=regression, correlation=correlation, **kwargs)
+
+
+def rgcv_linear_pearsonr(*args, regression_kwargs=None, correlation_kwargs=None, **kwargs):
+    regression = rgcv_linear_regression(regression_kwargs or {})
+    correlation = bl_linear_metric.pearsonr_correlation(correlation_kwargs or {})
+    return bl_linear_metric.CrossRegressedCorrelation(
+            *args, regression=regression, correlation=correlation,
+            **kwargs)
