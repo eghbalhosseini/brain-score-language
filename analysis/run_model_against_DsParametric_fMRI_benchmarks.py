@@ -22,12 +22,19 @@ if __name__ == '__main__':
               'ctrl']
     model = models[model_id]
     candidate = load_model(model)
-    DsParametric_benchmark_set=['DsParametric_fmri.max.language_top_90-linear',
-                          'DsParametric_fmri.max.language_top_80-linear',
-                            'DsParametric_fmri.min.language_top_90-linear',
-                            'DsParametric_fmri.min.language_top_80-linear',
-                            'DsParametric_fmri.random.language_top_90-linear',
-                            'DsParametric_fmri.random.language_top_80-linear',
+    DsParametric_benchmark_set=['DsParametric_fmri.max.language_top_90-linear_pearsonr',
+                          'DsParametric_fmri.max.language_top_80-linear_pearsonr',
+                            'DsParametric_fmri.min.language_top_90-linear_pearsonr',
+                            'DsParametric_fmri.min.language_top_80-linear_pearsonr',
+                            'DsParametric_fmri.random.language_top_90-linear_pearsonr',
+                            'DsParametric_fmri.random.language_top_80-linear_pearsonr',
+
+                                'DsParametric_fmri.max.language_top_90-rgcv_linear_pearsonr',
+                                'DsParametric_fmri.max.language_top_80-rgcv_linear_pearsonr',
+                                'DsParametric_fmri.min.language_top_90-rgcv_linear_pearsonr',
+                                'DsParametric_fmri.min.language_top_80-rgcv_linear_pearsonr',
+                                'DsParametric_fmri.random.language_top_90-rgcv_linear_pearsonr',
+                                'DsParametric_fmri.random.language_top_80-rgcv_linear_pearsonr',
                             ]
     for ann_benchmark in DsParametric_benchmark_set:
         benchmark=load_benchmark(ann_benchmark)

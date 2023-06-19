@@ -23,18 +23,18 @@ def DsParametric_fMRI_Linear(atlas,ceiling,stimulus_set):
 
 
 def DsParametric_fMRI_Ridge(atlas,ceiling,stimulus_set):
-    return _DsParametric_fMRI_ExperimentRidgeRegression(atlas=atlas,ceiling_s3_kwargs=ceiling,stimulus_set=stimulus_set,metric_id='ridge_correlation')
+    return _DsParametric_fMRI_ExperimentLinear(atlas=atlas,ceiling_s3_kwargs=ceiling,stimulus_set=stimulus_set,metric_id='rgcv_linear_pearsonr')
 
 
 
 class _DsParametric_fMRI_ExperimentLinear(BenchmarkBase):
-    def __init__(self, atlas:str,stimulus_set:str,ceiling_s3_kwargs: dict,metric_id='linear_pearsonr' ):
+    def __init__(self, atlas:str,stimulus_set:str,ceiling_s3_kwargs: dict,metric_id='linear_pearsonr'):
         self.stimulus_set = stimulus_set
         self.data = self._load_data(atlas)
         self.metric_id = metric_id
         self.metric = load_metric(self.metric_id)
 
-        identifier = f'DsParametric_fMRI.{self.stimulus_set}.{atlas}-linear'
+        identifier = f'DsParametric_fMRI.{self.stimulus_set}.{atlas}-{metric_id}'
         ceiling = None #if not ceiling_s3_kwargs else self._load_ceiling(identifier=identifier, **ceiling_s3_kwargs)
         super(_DsParametric_fMRI_ExperimentLinear, self).__init__(
             identifier=identifier,
@@ -73,6 +73,7 @@ class _DsParametric_fMRI_ExperimentLinear(BenchmarkBase):
         assert(np.all(prediction_last_word['stim_name'].values==self.data['stim_name'].values))
         raw_scores = []
         for layer_id, prediction_lw in prediction_last_word.groupby('layer'):
+            True
             raw_score = self.metric(prediction_lw, self.data)
             raw_scores.append(raw_score.raw.expand_dims(dim={"layer": [layer_id]}, axis=0))
         raw_scores = xr.concat(raw_scores, dim='layer')
@@ -98,15 +99,3 @@ class _DsParametric_fMRI_ExperimentLinear(BenchmarkBase):
         score.attrs['description'] = "score aggregated by taking median of neuroids per subject, " \
                                      "then median of subject scores"
         return score
-
-
-class _DsParametric_fMRI_ExperimentRidgeRegression(_DsParametric_fMRI_ExperimentLinear):
-    def __init__(self,atlas: str, stimulus_set: str, ceiling_s3_kwargs: dict, metric_id='ridge_correlation'):
-        self.data = self._load_data(atlas)
-        self.stimulus_set = stimulus_set
-        self.metric_id = metric_id
-        self.metric = load_metric(self.metric_id)
-        identifier = f'DsParametric_fMRI.{self.stimulus_set}.{atlas}-RidgeRegression'
-        ceiling = None
-        super(_DsParametric_fMRI_ExperimentRidgeRegression, self).__init__(
-            atlas=atlas,stimulus_set=stimulus_set,metric_id=metric_id, ceiling_s3_kwargs=ceiling_s3_kwargs)
