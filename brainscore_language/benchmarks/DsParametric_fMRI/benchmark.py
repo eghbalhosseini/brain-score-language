@@ -4,7 +4,7 @@ import numpy as np
 from brainio.assemblies import NeuroidAssembly
 from brainscore_core.benchmarks import BenchmarkBase
 from brainscore_core.metrics import Score
-from .package_activations import ACTIVATON_DIR
+from brainscore_language.benchmarks.DsParametric_fMRI.package_activations import ACTIVATON_DIR
 from brainscore_language import load_dataset, load_metric
 from brainscore_language.artificial_subject import ArtificialSubject
 from brainscore_language.utils.ceiling import ceiling_normalize
