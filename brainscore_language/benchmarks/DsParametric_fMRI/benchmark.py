@@ -27,7 +27,7 @@ class _DsParametric_fMRI_ExperimentLinear(BenchmarkBase):
         self.data = self._load_data(atlas)
         self.metric = load_metric('linear_pearsonr')
 
-        identifier = f'DsParametric_fMRI.{atlas}-linear'
+        identifier = f'DsParametric_fMRI.{self.stimulus_set}.{atlas}-linear'
         ceiling = None #if not ceiling_s3_kwargs else self._load_ceiling(identifier=identifier, **ceiling_s3_kwargs)
         super(_DsParametric_fMRI_ExperimentLinear, self).__init__(
             identifier=identifier,
@@ -57,11 +57,13 @@ class _DsParametric_fMRI_ExperimentLinear(BenchmarkBase):
                 predictions = pickle.load(f)
 
         else:
-            for stim_id, stim in tqdm(stimuli.groupby('stimulus_id'), desc='digest individual sentences'):
-                prediction = candidate.digest_text(str(stim.values))['neural']
-                prediction['stimulus_id'] = 'presentation', stim['stimulus_id'].values
-                predictions.append(prediction)
-            predictions = xr.concat(predictions, dim='presentation')
+            # throw an error if the predictions are not computed
+            raise ValueError('The predictions are not computed yet. Please run the analysis/run_model_against_DsParametric_fMRI_benchmarks.py')
+            # for stim_id, stim in tqdm(stimuli.groupby('stimulus_id'), desc='digest individual sentences'):
+            #     prediction = candidate.digest_text(str(stim.values))['neural']
+            #     prediction['stimulus_id'] = 'presentation', stim['stimulus_id'].values
+            #     predictions.append(prediction)
+            # predictions = xr.concat(predictions, dim='presentation')
 
         # get last word activations for predictions
         prediction_last_word=[]
