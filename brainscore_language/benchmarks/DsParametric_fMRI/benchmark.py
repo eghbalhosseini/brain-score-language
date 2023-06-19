@@ -18,6 +18,9 @@ import pickle
 BIBTEX = """
 }"""
 
+def DsParametric_fMRI(atlas,ceiling,stimulus_set):
+    return _DsParametric_fMRI_ExperimentLinear(atlas=atlas,ceiling_s3_kwargs=ceiling,stimulus_set=stimulus_set)
+
 class _DsParametric_fMRI_ExperimentLinear(BenchmarkBase):
     def __init__(self, atlas:str,stimulus_set:str,ceiling_s3_kwargs: dict ):
         self.stimulus_set = stimulus_set
